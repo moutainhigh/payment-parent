@@ -142,6 +142,8 @@ public class WechatUtil {
             root.appendChild(filed);
         }
         TransformerFactory tf = TransformerFactory.newInstance();
+        //防止外部实体注入，xml漏洞攻击解决
+        tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         Transformer transformer = tf.newTransformer();
         DOMSource source = new DOMSource(document);
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
