@@ -2,6 +2,7 @@ package cn.aposoft.ecommerce.wechat.tencent;
 
 /**
  * 静态参数
+ *
  * @author code
  * @Title: WechatConstant
  * @Copyright: Copyright (c) 2017
@@ -10,6 +11,9 @@ package cn.aposoft.ecommerce.wechat.tencent;
  * @Created on 2018/8/18上午11:42
  */
 public class WechatConstant {
+    private WechatConstant() {
+
+    }
 
     public static final String SIGN = "sign";
     public static final String HMACSHA256 = "HMAC-SHA256";

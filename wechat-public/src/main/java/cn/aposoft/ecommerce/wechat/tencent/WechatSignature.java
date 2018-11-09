@@ -18,6 +18,9 @@ import java.util.Set;
 public class WechatSignature {
     
 
+    private WechatSignature(){
+        
+    }
     /**
      * HmacSHA256加密模式判断签名是否正确
      *

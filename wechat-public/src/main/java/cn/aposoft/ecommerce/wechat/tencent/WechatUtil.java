@@ -33,6 +33,9 @@ import java.util.Random;
  */
 public class WechatUtil {
 
+    private WechatUtil(){
+
+    }
 
     private static final String SYMBOLS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
