@@ -8,6 +8,7 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.pay_protocol.WeChatPayResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.pay_query_protocol.WechatPayQueryResData;
 import cn.aposoft.ecommerce.wechat.config.BaseWechatConfig;
 import cn.aposoft.ecommerce.wechat.config.WechatPubPropertiesConfig;
+import cn.aposoft.ecommerce.wechat.enums.BillTypeEnum;
 import cn.aposoft.ecommerce.wechat.enums.SignTypeEnum;
 import cn.aposoft.ecommerce.wechat.httpclient.HttpRequestUtil;
 import cn.aposoft.ecommerce.wechat.httpclient.HttpRequestUtilImpl;
@@ -113,7 +114,7 @@ public class PrepareForBasePaymentServiceMockTest {
 
         //验签通过设置
         PowerMockito.doNothing().when(basePaymentService, "checkVerify",
-                Mockito.any(String.class), Mockito.any(String.class), Mockito.any(String.class), Mockito.any(SignTypeEnum.class));
+                Mockito.any(String.class), Mockito.any(String.class),  Mockito.any(SignTypeEnum.class));
     }
 
     private String responseQueryData() {
@@ -193,7 +194,7 @@ public class PrepareForBasePaymentServiceMockTest {
         DownloadBillParams params = getDownloadBillParamsDTO();
 
         PowerMockito.doReturn(requestXml()).when(basePaymentService, "createXmlRequest",
-                Mockito.any(DownloadBillParams.class), Mockito.any(WechatPubPropertiesConfig.class), Mockito.any());
+                 Mockito.any());
 
         mockResponseAndIgnoreVerifySign(responseAllData());
 
@@ -206,7 +207,7 @@ public class PrepareForBasePaymentServiceMockTest {
     private DownloadBillParams getDownloadBillParamsDTO() {
         DownloadBillParamsDTO params = new DownloadBillParamsDTO();
         params.setBill_date("20180921")
-                .setBill_type("ALL");
+                .setBill_type(BillTypeEnum.ALL);
         return params;
     }
 

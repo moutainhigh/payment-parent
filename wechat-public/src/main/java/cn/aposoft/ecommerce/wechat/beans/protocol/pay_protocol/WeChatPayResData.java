@@ -17,9 +17,6 @@ public class WeChatPayResData extends BaseResponseBeans {
 
 
     private String device_info;
-    private String result_code;
-    private String err_code;
-    private String err_code_des;
 
 
     //业务返回的具体数据（以下字段在return_code 和result_code 都为SUCCESS 的时候有返回）
@@ -37,32 +34,6 @@ public class WeChatPayResData extends BaseResponseBeans {
         return this;
     }
 
-    public String getResult_code() {
-        return result_code;
-    }
-
-    public WeChatPayResData setResult_code(String result_code) {
-        this.result_code = result_code;
-        return this;
-    }
-
-    public String getErr_code() {
-        return err_code;
-    }
-
-    public WeChatPayResData setErr_code(String err_code) {
-        this.err_code = err_code;
-        return this;
-    }
-
-    public String getErr_code_des() {
-        return err_code_des;
-    }
-
-    public WeChatPayResData setErr_code_des(String err_code_des) {
-        this.err_code_des = err_code_des;
-        return this;
-    }
 
     public String getTrade_type() {
         return trade_type;

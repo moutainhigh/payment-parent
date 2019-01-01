@@ -5,6 +5,7 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.downloadbill_protocol.WechatDo
 import cn.aposoft.ecommerce.wechat.beans.protocol.downloadbill_protocol.WechatDownloadBillResData;
 import cn.aposoft.ecommerce.wechat.config.BaseWechatConfig;
 import cn.aposoft.ecommerce.wechat.config.WechatPubPropertiesConfig;
+import cn.aposoft.ecommerce.wechat.enums.BillTypeEnum;
 import cn.aposoft.ecommerce.wechat.httpclient.HttpRequestUtil;
 import cn.aposoft.ecommerce.wechat.httpclient.HttpRequestUtilImpl;
 import cn.aposoft.ecommerce.wechat.params.DownloadBillParams;
@@ -90,7 +91,7 @@ public class PaymentServiceMockTest {
     private DownloadBillParams getDownloadBillParamsDTO() {
         DownloadBillParamsDTO params = new DownloadBillParamsDTO();
         params.setBill_date("20180921")
-                .setBill_type("ALL");
+                .setBill_type(BillTypeEnum.ALL);
         return params;
     }
 

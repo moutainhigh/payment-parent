@@ -1,5 +1,6 @@
 package cn.aposoft.ecommerce.wechat.beans;
 
+import cn.aposoft.ecommerce.wechat.enums.BillTypeEnum;
 import cn.aposoft.ecommerce.wechat.params.DownloadBillParams;
 
 /**
@@ -12,14 +13,14 @@ import cn.aposoft.ecommerce.wechat.params.DownloadBillParams;
  */
 public class DownloadBillParamsDTO implements DownloadBillParams {
     private String bill_date;
-    private String bill_type;
+    private BillTypeEnum bill_type;
 
     public DownloadBillParamsDTO setBill_date(String bill_date) {
         this.bill_date = bill_date;
         return this;
     }
 
-    public DownloadBillParamsDTO setBill_type(String bill_type) {
+    public DownloadBillParamsDTO setBill_type(BillTypeEnum bill_type) {
         this.bill_type = bill_type;
         return this;
     }
@@ -30,7 +31,7 @@ public class DownloadBillParamsDTO implements DownloadBillParams {
     }
 
     @Override
-    public String getBill_type() {
+    public BillTypeEnum getBill_type() {
         return bill_type;
     }
 }

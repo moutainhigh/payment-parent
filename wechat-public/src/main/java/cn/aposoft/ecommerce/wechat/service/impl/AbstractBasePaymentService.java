@@ -71,15 +71,14 @@ public abstract class AbstractBasePaymentService implements BasePaymentService {
     /**
      * 创建xmlRequest信息
      *
-     * @param requestBeans
-     * @param config
-     * @param clazz
+     * @param params
      * @return
      * @throws Exception
      */
-    protected String createXmlRequest(Object requestBeans, BaseWechatConfig config, Class clazz) throws Exception {
-        BaseRequestBeans data = (BaseRequestBeans) BeanConvertUtils.convert(requestBeans, clazz);
-        setAccountData(config, data, WechatConstant.MD5);
+
+    protected <T> String createXmlRequest(HttpInvokeParams<T> params) throws Exception {
+        BaseRequestBeans data = (BaseRequestBeans) BeanConvertUtils.convert(params.getRequestParams(), params.getRequestBean());
+        setAccountData(params.getConfig(), data, params.getSignTypeEnum().name());
         return WechatUtil.ObjectToXml(data);
     }
 
@@ -106,7 +105,7 @@ public abstract class AbstractBasePaymentService implements BasePaymentService {
      * @throws Exception
      */
     protected <T> T httpInvoke(HttpInvokeParams<T> params) throws Exception {
-        String xml = createXmlRequest(params.getRequestParams(), params.getConfig(), params.getRequestBean());
+        String xml = createXmlRequest(params);
         String response = httpRequestUtil.post(xml, params.getConfig(), params.getUrl());
         checkVerify(params, response);
         T responseData = WechatUtil.getObjectFromXML(response, params.getResponseBean());
@@ -130,6 +129,7 @@ public abstract class AbstractBasePaymentService implements BasePaymentService {
             analysisRefundResData((WeChatRefundResData) responseData, responseMap);
         }
     }
+
     /**
      * 退款申请动态属性解析
      *
@@ -189,6 +189,7 @@ public abstract class AbstractBasePaymentService implements BasePaymentService {
             resData.setCoupon_type_$n(entry.getValue());
         }
     }
+
     /**
      * 解析退款查询返回结果的动态属性
      *
@@ -250,7 +251,7 @@ public abstract class AbstractBasePaymentService implements BasePaymentService {
      * @throws Exception
      */
     protected <T> T httpsInvoke(HttpInvokeParams<T> params) throws Exception {
-        String xml = createXmlRequest(params.getRequestParams(), params.getConfig(), params.getRequestBean());
+        String xml = createXmlRequest(params);
         String response = httpRequestUtil.keyCertPost(xml, params.getConfig(), params.getUrl());
 
         checkVerify(params, response);
@@ -305,14 +306,14 @@ public abstract class AbstractBasePaymentService implements BasePaymentService {
             //过滤掉对账单标题部分以及统计部分的内容
 
 
-            if (BillTypeEnum.REFUND.name().equals(params.getBill_type())) {
-                if (StringUtils.equals("交易时间", lineData[0]) || lineData.length != 26) {
+            if (BillTypeEnum.REFUND == params.getBill_type()) {
+                if (isNotRefundDataLine(lineData)) {
                     continue;
                 }
                 list.add(convertWechatDownloadRefundData(lineData, Integer.valueOf(params.getBill_date())));
-            } else if (BillTypeEnum.ALL.name().equals(params.getBill_type())
-                    || StringUtils.isEmpty(params.getBill_type())) {
-                if (StringUtils.equals("交易时间", lineData[0]) || lineData.length != 24) {
+            } else if (params.getBill_type() == null || BillTypeEnum.ALL == params.getBill_type()
+                    ) {
+                if (isNotAllDataLine(lineData)) {
                     continue;
                 }
                 list.add(convertWechatAllData(lineData, Integer.valueOf(params.getBill_date())));
@@ -321,6 +322,29 @@ public abstract class AbstractBasePaymentService implements BasePaymentService {
         return list;
     }
 
+    /**
+     * 判断是否为对账数据行的内容。
+     *
+     * @param lineData
+     * @return
+     */
+    private boolean isNotAllDataLine(String[] lineData) {
+        return StringUtils.equals("交易时间", lineData[0])
+                //24：老版对账单格式，目前测试结果为10月份。26或者27：新版对账单格式，其中最后一个字段，费率备注字段值为空=26，不为空=27
+                || (lineData.length != 24 && lineData.length != 26 && lineData.length != 27);
+    }
+
+    /**
+     * 判断是否为退款数据行的内容。
+     *
+     * @param lineData
+     * @return
+     */
+    private boolean isNotRefundDataLine(String[] lineData) {
+        return StringUtils.equals("交易时间", lineData[0])
+                //新版退款账单，29个字段
+                || (lineData.length != 26 && lineData.length != 28 && lineData.length != 29);
+    }
 
     /**
      * 将对账单数据转换为对象类型

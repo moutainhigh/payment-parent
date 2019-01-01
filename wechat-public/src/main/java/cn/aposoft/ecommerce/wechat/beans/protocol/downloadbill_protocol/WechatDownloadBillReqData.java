@@ -1,6 +1,7 @@
 package cn.aposoft.ecommerce.wechat.beans.protocol.downloadbill_protocol;
 
 import cn.aposoft.ecommerce.wechat.beans.protocol.BaseRequestBeans;
+import cn.aposoft.ecommerce.wechat.enums.BillTypeEnum;
 
 /**
  * User: rizenguo
@@ -11,7 +12,7 @@ public class WechatDownloadBillReqData extends BaseRequestBeans {
     //每个字段具体的意思请查看API文档
 
     private String bill_date;
-    private String bill_type;
+    private BillTypeEnum bill_type;
     private String tar_type;
     private String sign_type;
 
@@ -38,11 +39,11 @@ public class WechatDownloadBillReqData extends BaseRequestBeans {
         return this;
     }
 
-    public String getBill_type() {
+    public BillTypeEnum getBill_type() {
         return bill_type;
     }
 
-    public WechatDownloadBillReqData setBill_type(String bill_type) {
+    public WechatDownloadBillReqData setBill_type(BillTypeEnum bill_type) {
         this.bill_type = bill_type;
         return this;
     }

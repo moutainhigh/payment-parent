@@ -11,4 +11,6 @@ package cn.aposoft.ecommerce.wechat.enums;
  */
 public enum SignTypeEnum {
     MD5, HMACSHA256
+    //无加密操作
+    ,NO_ENCRYPT
 }

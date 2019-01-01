@@ -11,9 +11,6 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.BaseResponseBeans;
 public class WechatPayQueryResData extends BaseResponseBeans {
 
 
-    private String result_code;
-    private String err_code;
-    private String err_code_des;
 
     //以下字段在return_code 和result_code 都为SUCCESS 的时候有返回
 
@@ -56,32 +53,6 @@ public class WechatPayQueryResData extends BaseResponseBeans {
     private String time_end;
     private String trade_state_desc;
 
-    public String getResult_code() {
-        return result_code;
-    }
-
-    public WechatPayQueryResData setResult_code(String result_code) {
-        this.result_code = result_code;
-        return this;
-    }
-
-    public String getErr_code() {
-        return err_code;
-    }
-
-    public WechatPayQueryResData setErr_code(String err_code) {
-        this.err_code = err_code;
-        return this;
-    }
-
-    public String getErr_code_des() {
-        return err_code_des;
-    }
-
-    public WechatPayQueryResData setErr_code_des(String err_code_des) {
-        this.err_code_des = err_code_des;
-        return this;
-    }
 
     public String getDevice_info() {
         return device_info;

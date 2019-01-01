@@ -90,8 +90,11 @@ public class BasePaymentServiceImpl extends AbstractBasePaymentService {
 
     @Override
     public List<WechatDownloadBillResData> downloadBill(DownloadBillParams params, BaseWechatConfig config) throws Exception {
-        String xml = createXmlRequest(params, config, WechatDownloadBillReqData.class);
-        String response = httpRequestUtil.post(xml, config, config.getDownloadBillUrl());
+
+        HttpInvokeParams<Object> invokeParams = convertInvoke(params, config,
+                WechatDownloadBillReqData.class, null, config.getDownloadBillUrl(), SignTypeEnum.MD5);
+        String xml = createXmlRequest(invokeParams);
+        String response = httpRequestUtil.post(xml, invokeParams.getConfig(), invokeParams.getUrl());
         //默认检测对账单路径是否存在，存在，则生成文件记录，不存在，则不进行文件数据记录
         if (StringUtils.isNotEmpty(config.getStatementPath())) {
             String path = config.getStatementPath();
@@ -112,7 +115,6 @@ public class BasePaymentServiceImpl extends AbstractBasePaymentService {
     public void close() throws Exception {
         httpRequestUtil.close();
     }
-
 
 
 }

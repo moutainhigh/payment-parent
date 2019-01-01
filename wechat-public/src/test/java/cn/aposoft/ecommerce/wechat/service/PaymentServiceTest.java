@@ -7,6 +7,7 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.pay_protocol.WeChatPayResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.pay_query_protocol.WechatPayQueryResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_protocol.WeChatRefundResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_query_protocol.WechatRefundQueryResData;
+import cn.aposoft.ecommerce.wechat.enums.BillTypeEnum;
 import cn.aposoft.ecommerce.wechat.enums.SignTypeEnum;
 import cn.aposoft.ecommerce.wechat.params.CloseOrderParams;
 import cn.aposoft.ecommerce.wechat.params.DownloadBillParams;
@@ -212,9 +213,9 @@ public class PaymentServiceTest extends BaseAppTest {
 
     private DownloadBillParams getDownloadBillParams() {
         DownloadBillParamsDTO paramsDTO = new DownloadBillParamsDTO();
-        paramsDTO.setBill_type("REFUND")
+        paramsDTO.setBill_type(BillTypeEnum.ALL)
 //                .setBill_date(getYesterday());
-                .setBill_date("20180821");
+                .setBill_date("20181109");
         return paramsDTO;
     }
 

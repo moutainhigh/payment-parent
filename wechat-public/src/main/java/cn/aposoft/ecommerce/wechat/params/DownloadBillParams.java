@@ -1,5 +1,7 @@
 package cn.aposoft.ecommerce.wechat.params;
 
+import cn.aposoft.ecommerce.wechat.enums.BillTypeEnum;
+
 import java.io.Serializable;
 
 /**
@@ -13,5 +15,5 @@ import java.io.Serializable;
  */
 public interface DownloadBillParams extends Serializable {
     public String getBill_date();
-    public String getBill_type();
+    public BillTypeEnum getBill_type();
 }
