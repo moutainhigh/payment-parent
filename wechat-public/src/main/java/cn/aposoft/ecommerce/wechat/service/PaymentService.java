@@ -6,8 +6,13 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.pay_protocol.WeChatPayResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.pay_query_protocol.WechatPayQueryResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_protocol.WeChatRefundResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_query_protocol.WechatRefundQueryResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_finish_protocol.WechatSubAccountFinishResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_protocol.WechatSubAccountResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_query_protocol.WechatSubAccountQueryResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_receiver_protocol.WechatSubAccountReceiverData;
 import cn.aposoft.ecommerce.wechat.enums.SignTypeEnum;
 import cn.aposoft.ecommerce.wechat.params.*;
+
 import java.util.List;
 
 /**
@@ -18,7 +23,7 @@ import java.util.List;
  * @Company: www.qdingnet.com
  * @Created on 2018/8/19上午10:13
  */
-public interface PaymentService extends AutoCloseable{
+public interface PaymentService extends AutoCloseable {
 
     /**
      * 实现支付订单的发送及返回值的返回
@@ -151,11 +156,60 @@ public interface PaymentService extends AutoCloseable{
 
     /**
      * 从微信端接收的xml数据
+     *
      * @param xml
      * @param signType 签名类型
      * @return
      */
     boolean verifySign(String xml, SignTypeEnum signType);
+
+    /**
+     * 单次分账请求接口
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountResData subAccount(SubAccountParams params) throws Exception;
+
+    /**
+     * 多次分账请求
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    WechatSubAccountResData multiSubAccount(SubAccountParams params) throws Exception;
+
+    /**
+     * 分账查询接口
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountQueryResData subAccountQuery(SubAccountQueryParams params) throws Exception;
+
+    /**
+     * 添加分账接收人接口
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountReceiverData subAccountAddReceiver(SubAccountReceiverParams params) throws Exception;
+
+    /**
+     * 删除分账接收人
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountReceiverData subAccountDelReceiver(SubAccountReceiverParams params) throws Exception;
+
+    /**
+     * 完结分账接口
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountFinishResData subAccountFinish(SubAccountReceiverParams params) throws Exception;
 
     void close() throws Exception;
 }

@@ -6,6 +6,10 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.pay_protocol.WeChatPayResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.pay_query_protocol.WechatPayQueryResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_protocol.WeChatRefundResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_query_protocol.WechatRefundQueryResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_finish_protocol.WechatSubAccountFinishResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_protocol.WechatSubAccountResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_query_protocol.WechatSubAccountQueryResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_receiver_protocol.WechatSubAccountReceiverData;
 import cn.aposoft.ecommerce.wechat.config.BaseWechatConfig;
 import cn.aposoft.ecommerce.wechat.config.WechatPubPropertiesConfig;
 import cn.aposoft.ecommerce.wechat.enums.SignTypeEnum;
@@ -43,16 +47,15 @@ public class PaymentServiceImpl implements PaymentService, AutoCloseable {
 
     @Override
     public WeChatPayResData pay(OrderParams orderParams) throws Exception {
-        if (config == null) {
-            config = new WechatPubPropertiesConfig();
-        } else {
-            checkWechatConfig(config, UrlEnum.PAY_URL);
-        }
+        checkWechatConfig(config, UrlEnum.PAY_URL);
         //检查完成没有问题，开始发起HTTP请求
         return basePaymentService.pay(orderParams, config);
     }
 
     protected void checkWechatConfig(BaseWechatConfig config, UrlEnum urlEnum) throws Exception {
+        if (config == null) {
+            config = new WechatPubPropertiesConfig();
+        }
         if (StringUtils.isEmpty(config.getAppID())) {
             throw new WechatConfigNullException("appId is null");
         }
@@ -102,50 +105,72 @@ public class PaymentServiceImpl implements PaymentService, AutoCloseable {
                 if (StringUtils.isEmpty(config.getOrderQueryUrl())) {
                     throw new WechatConfigNullException("NOTIFY_URL is null");
                 }
+                break;
+            case SUB_ACCOUNT_URL:
+                if (StringUtils.isEmpty(config.getSubAccountUrl())) {
+                    throw new WechatConfigNullException("SUB_ACCOUNT_URL is null");
+                }
+                break;
+
+
+            case SUB_ACCOUNT_MULTI_URL:
+
+                if (StringUtils.isEmpty(config.getSubAccountMultiUrl())) {
+                    throw new WechatConfigNullException("SUB_ACCOUNT_MULTI_URL is null");
+                }
+                break;
+
+
+            case SUB_ACCOUNT_QUERY_URL:
+                if (StringUtils.isEmpty(config.getSubAccountQueryUrl())) {
+                    throw new WechatConfigNullException("SUB_ACCOUNT_QUERY_URL is null");
+                }
+                break;
+            case SUB_ACCOUNT_ADD_RECEIVER_URL:
+                if (StringUtils.isEmpty(config.getSubAccountAddReceiverUrl())) {
+                    throw new WechatConfigNullException("SUB_ACCOUNT_ADD_RECEIVER_URL is null");
+                }
+                break;
+            case SUB_ACCOUNT_DEL_RECEIVER_URL:
+                if (StringUtils.isEmpty(config.getSubAccountDelReceiverUrl())) {
+                    throw new WechatConfigNullException("SUB_ACCOUNT_DEL_RECEIVER_URL is null");
+                }
+                break;
+            case SUB_ACCOUNT_FINISH_URL:
+                if (StringUtils.isEmpty(config.getSubAccountFinishUrl())) {
+                    throw new WechatConfigNullException("SUB_ACCOUNT_FINISH_URL is null");
+                }
+                break;
+
+            default:
 
         }
     }
 
     @Override
     public WechatPayQueryResData query(OrderQueryParams orderQueryParams) throws Exception {
-        if (config == null) {
-            config = new WechatPubPropertiesConfig();
-        } else {
-            checkWechatConfig(config, UrlEnum.ORDER_QUERY_URL);
-        }
+        checkWechatConfig(config, UrlEnum.ORDER_QUERY_URL);
         //检查完成没有问题，开始发起HTTP请求
         return basePaymentService.query(orderQueryParams, config);
     }
 
     @Override
     public WechatCloseResData closeOrder(CloseOrderParams params) throws Exception {
-        if (config == null) {
-            config = new WechatPubPropertiesConfig();
-        } else {
-            checkWechatConfig(config, UrlEnum.CLOSE_ORDER_URL);
-        }
+        checkWechatConfig(config, UrlEnum.CLOSE_ORDER_URL);
         //检查完成没有问题，开始发起HTTP请求
         return basePaymentService.closeOrder(params, config);
     }
 
     @Override
     public WeChatRefundResData refund(RefundParams refund) throws Exception {
-        if (config == null) {
-            config = new WechatPubPropertiesConfig();
-        } else {
-            checkWechatConfig(config, UrlEnum.REFUND_URL);
-        }
+        checkWechatConfig(config, UrlEnum.REFUND_URL);
         //检查完成没有问题，开始发起HTTP请求
         return basePaymentService.refund(refund, config);
     }
 
     @Override
     public WechatRefundQueryResData refundQuery(RefundQueryParams params) throws Exception {
-        if (config == null) {
-            config = new WechatPubPropertiesConfig();
-        } else {
-            checkWechatConfig(config, UrlEnum.REFUND_QUERY_URL);
-        }
+        checkWechatConfig(config, UrlEnum.REFUND_QUERY_URL);
         //检查完成没有问题，开始发起HTTP请求
         return basePaymentService.refundQuery(params, config);
     }
@@ -169,6 +194,42 @@ public class PaymentServiceImpl implements PaymentService, AutoCloseable {
             LogPortal.error("签名校验失败,xml=[{}],[{}]", xml, e);
             return false;
         }
+    }
+
+    @Override
+    public WechatSubAccountResData subAccount(SubAccountParams params) throws Exception {
+        checkWechatConfig(config, UrlEnum.SUB_ACCOUNT_URL);
+        //TODO
+        return null;
+    }
+@Override
+    public WechatSubAccountResData multiSubAccount(SubAccountParams params) throws Exception {
+        checkWechatConfig(config, UrlEnum.SUB_ACCOUNT_MULTI_URL);//TODO
+        return null;
+    }
+
+    @Override
+    public WechatSubAccountQueryResData subAccountQuery(SubAccountQueryParams params) throws Exception {
+        checkWechatConfig(config, UrlEnum.SUB_ACCOUNT_QUERY_URL);//TODO
+        return null;
+    }
+
+    @Override
+    public WechatSubAccountReceiverData subAccountAddReceiver(SubAccountReceiverParams params) throws Exception {
+        checkWechatConfig(config, UrlEnum.SUB_ACCOUNT_ADD_RECEIVER_URL);//TODO
+        return null;
+    }
+
+    @Override
+    public WechatSubAccountReceiverData subAccountDelReceiver(SubAccountReceiverParams params) throws Exception {
+        checkWechatConfig(config, UrlEnum.SUB_ACCOUNT_DEL_RECEIVER_URL);//TODO
+        return null;
+    }
+
+    @Override
+    public WechatSubAccountFinishResData subAccountFinish(SubAccountReceiverParams params) throws Exception {
+        checkWechatConfig(config, UrlEnum.SUB_ACCOUNT_FINISH_URL);//TODO
+        return null;
     }
 
     @Override

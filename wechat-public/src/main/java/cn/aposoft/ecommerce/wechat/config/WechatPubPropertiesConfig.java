@@ -1,5 +1,7 @@
 package cn.aposoft.ecommerce.wechat.config;
 
+import cn.aposoft.ecommerce.wechat.util.LogPortal;
+
 import java.io.*;
 import java.util.Map;
 import java.util.Properties;
@@ -85,11 +87,40 @@ public class WechatPubPropertiesConfig implements BaseWechatConfig {
      * 退款查询URL
      */
     private String REFUND_QUERY_URL;
+    /**
+     * 退款通知地址
+     */
+    private String REFUND_NOTIFY_URL;
 
     /**
      * 下载订单对账单地址
      */
     private String DOWNLOAD_BILL_URL;
+    /**
+     * 单次分账请求URL
+     */
+    private String SUB_ACCOUNT_URL;
+    /**
+     * 多次分账请求URL
+     */
+    private String SUB_ACCOUNT_MULTI_URL;
+
+    /**
+     * 分账查询URL
+     */
+    private String SUB_ACCOUNT_QUERY_URL;
+    /**
+     * 添加分账接收方URL
+     */
+    private String SUB_ACCOUNT_ADD_RECEIVER_URL;
+    /**
+     * 删除分账接收方URL
+     */
+    private String SUB_ACCOUNT_DEL_RECEIVER_URL;
+    /**
+     * 完成分账URL
+     */
+    private String SUB_ACCOUNT_FINISH_URL;
 
     /**
      * 配置参数赋值
@@ -117,6 +148,7 @@ public class WechatPubPropertiesConfig implements BaseWechatConfig {
         ORDER_QUERY_URL = p.getProperty("ORDER_QUERY_URL");
         CLOSE_ORDER_URL = p.getProperty("CLOSE_ORDER_URL");
         REFUND_QUERY_URL = p.getProperty("REFUND_QUERY_URL");
+        REFUND_NOTIFY_URL = p.getProperty("REFUND_NOTIFY_URL");
         DOWNLOAD_BILL_URL = p.getProperty("DOWNLOAD_BILL_URL");
         PKCS12_PATH = p.getProperty("PKCS12_PATH");
 
@@ -124,6 +156,16 @@ public class WechatPubPropertiesConfig implements BaseWechatConfig {
         SUB_MCH_ID = p.getProperty("SUB_MCH_ID");
         SUB_APPID = p.getProperty("SUB_APPID");
         STATEMENT_FILE_PATH = p.getProperty("STATEMENT_FILE_PATH");
+
+        //分账部分的配置信息
+        SUB_ACCOUNT_URL = p.getProperty("SUB_ACCOUNT_URL");
+        SUB_ACCOUNT_MULTI_URL = p.getProperty("SUB_ACCOUNT_MULTI_URL");
+        SUB_ACCOUNT_QUERY_URL = p.getProperty("SUB_ACCOUNT_QUERY_URL");
+        SUB_ACCOUNT_ADD_RECEIVER_URL = p.getProperty("SUB_ACCOUNT_ADD_RECEIVER_URL");
+        SUB_ACCOUNT_DEL_RECEIVER_URL = p.getProperty("SUB_ACCOUNT_DEL_RECEIVER_URL");
+        SUB_ACCOUNT_FINISH_URL = p.getProperty("SUB_ACCOUNT_FINISH_URL");
+
+
     }
 
     /**
@@ -148,6 +190,7 @@ public class WechatPubPropertiesConfig implements BaseWechatConfig {
         ORDER_QUERY_URL = map.get("ORDER_QUERY_URL");
         CLOSE_ORDER_URL = map.get("CLOSE_ORDER_URL");
         REFUND_QUERY_URL = map.get("REFUND_QUERY_URL");
+        REFUND_NOTIFY_URL = map.get("REFUND_NOTIFY_URL");
         DOWNLOAD_BILL_URL = map.get("DOWNLOAD_BILL_URL");
         PKCS12_PATH = map.get("PKCS12_PATH");
         /** add yujinshui 2016-02-02 */
@@ -155,6 +198,15 @@ public class WechatPubPropertiesConfig implements BaseWechatConfig {
         SUB_MCH_ID = map.get("SUB_MCH_ID");
         SUB_APPID = map.get("SUB_APPID");
         STATEMENT_FILE_PATH = map.get("STATEMENT_FILE_PATH");
+
+        //分账相关配置
+        SUB_ACCOUNT_URL = map.get("SUB_ACCOUNT_URL");
+        SUB_ACCOUNT_MULTI_URL = map.get("SUB_ACCOUNT_MULTI_URL");
+        SUB_ACCOUNT_QUERY_URL = map.get("SUB_ACCOUNT_QUERY_URL");
+        SUB_ACCOUNT_ADD_RECEIVER_URL = map.get("SUB_ACCOUNT_ADD_RECEIVER_URL");
+        SUB_ACCOUNT_DEL_RECEIVER_URL = map.get("SUB_ACCOUNT_DEL_RECEIVER_URL");
+        SUB_ACCOUNT_FINISH_URL = map.get("SUB_ACCOUNT_FINISH_URL");
+
     }
 
     public WechatPubPropertiesConfig(String fileName) {
@@ -291,7 +343,42 @@ public class WechatPubPropertiesConfig implements BaseWechatConfig {
     @Override
     public String getRefundQueryUrl() {
         return REFUND_QUERY_URL;
+    }@Override
+    public String getRefundNotifyUrl() {
+        return REFUND_NOTIFY_URL;
     }
+
+
+    @Override
+    public String getSubAccountUrl() {
+        return SUB_ACCOUNT_URL;
+    }
+
+    @Override
+    public String getSubAccountMultiUrl() {
+        return SUB_ACCOUNT_MULTI_URL;
+    }
+
+    @Override
+    public String getSubAccountQueryUrl() {
+        return SUB_ACCOUNT_QUERY_URL;
+    }
+
+    @Override
+    public String getSubAccountAddReceiverUrl() {
+        return SUB_ACCOUNT_ADD_RECEIVER_URL;
+    }
+
+    @Override
+    public String getSubAccountDelReceiverUrl() {
+        return SUB_ACCOUNT_DEL_RECEIVER_URL;
+    }
+
+    @Override
+    public String getSubAccountFinishUrl() {
+        return SUB_ACCOUNT_FINISH_URL;
+    }
+
 
     @Override
     public String connectionsPerRoute() {
@@ -338,5 +425,31 @@ public class WechatPubPropertiesConfig implements BaseWechatConfig {
     @Override
     public InputStream getCertStream() throws Exception {
         return new FileInputStream(new File(PKCS12_PATH));
+    }
+
+    private void printConfig() {
+        LogPortal.info("配置文件转换后获取的配置如下,APPID=" + APPID
+                + ",MCH_ID=" + MCH_ID
+                + ",KEY=" + KEY
+                + ",PAY_URL=" + PAY_URL
+                + ",NOTIFY_URL=" + NOTIFY_URL
+                + ",REFUND_URL=" + REFUND_URL
+                + ",ORDER_QUERY_URL=" + ORDER_QUERY_URL
+                + ",CLOSE_ORDER_URL=" + CLOSE_ORDER_URL
+                + ",REFUND_QUERY_URL=" + REFUND_QUERY_URL
+                + ",DOWNLOAD_BILL_URL=" + DOWNLOAD_BILL_URL
+                + ",REFUND_NOTIFY_URL=" + REFUND_NOTIFY_URL
+                + ",PKCS12_PATH=" + PKCS12_PATH
+                + ",CONNECTIONS_PER_ROUTE=" + CONNECTIONS_PER_ROUTE
+                + ",SUB_MCH_ID=" + SUB_MCH_ID
+                + ",SUB_APPID=" + SUB_APPID
+                + ",STATEMENT_FILE_PATH=" + STATEMENT_FILE_PATH
+                + ",SUB_ACCOUNT_URL=" + SUB_ACCOUNT_URL
+                + ",SUB_ACCOUNT_MULTI_URL=" + SUB_ACCOUNT_MULTI_URL
+                + ",SUB_ACCOUNT_QUERY_URL=" + SUB_ACCOUNT_QUERY_URL
+                + ",SUB_ACCOUNT_ADD_RECEIVER_URL=" + SUB_ACCOUNT_ADD_RECEIVER_URL
+                + ",SUB_ACCOUNT_DEL_RECEIVER_URL=" + SUB_ACCOUNT_DEL_RECEIVER_URL
+                + ",SUB_ACCOUNT_FINISH_URL=" + SUB_ACCOUNT_FINISH_URL
+        );
     }
 }

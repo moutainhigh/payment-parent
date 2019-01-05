@@ -68,6 +68,55 @@ public interface BaseWechatConfig {
 
     public String getRefundQueryUrl();
 
+    /**
+     * 退款通知地址
+     * @return
+     */
+    public String getRefundNotifyUrl();
+
+    /**
+     * 单次分账请求URL
+     *
+     * @return
+     */
+    public String getSubAccountUrl();
+
+    /**
+     * 多次分账请求URL
+     *
+     * @return
+     */
+    public String getSubAccountMultiUrl();
+
+    /**
+     * 分账查询URL
+     *
+     * @return
+     */
+    public String getSubAccountQueryUrl();
+
+    /**
+     * 添加分账接收方URL
+     *
+     * @return
+     */
+    public String getSubAccountAddReceiverUrl();
+
+    /**
+     * 删除分账接收方URL
+     *
+     * @return
+     */
+    public String getSubAccountDelReceiverUrl();
+
+    /**
+     * 完成分账URL
+     *
+     * @return
+     */
+    public String getSubAccountFinishUrl();
+
+
 
     public String connectionsPerRoute();
 
