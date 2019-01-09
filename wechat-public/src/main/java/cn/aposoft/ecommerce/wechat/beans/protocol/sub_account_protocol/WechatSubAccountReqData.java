@@ -15,7 +15,7 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.BaseRequestBeans;
 public class WechatSubAccountReqData extends BaseRequestBeans {
 
     /**
-     * 必填。签名类型，目前只支持HMAC-SHA256
+     * 选填。签名类型，目前只支持HMAC-SHA256
      */
     private String sign_type;
     /**

@@ -12,6 +12,13 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.refund_protocol.WeChatRefundRe
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_protocol.WeChatRefundResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_query_protocol.WechatRefundQueryReqData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_query_protocol.WechatRefundQueryResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_finish_protocol.WechatSubAccountFinishReqData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_finish_protocol.WechatSubAccountFinishResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_protocol.WechatSubAccountReqData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_protocol.WechatSubAccountResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_query_protocol.WechatSubAccountQueryReqData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_query_protocol.WechatSubAccountQueryResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_receiver_protocol.WechatSubAccountReceiverData;
 import cn.aposoft.ecommerce.wechat.config.BaseWechatConfig;
 import cn.aposoft.ecommerce.wechat.enums.SignTypeEnum;
 import cn.aposoft.ecommerce.wechat.httpclient.HttpRequestUtil;
@@ -114,6 +121,55 @@ public class BasePaymentServiceImpl extends AbstractBasePaymentService {
     @Override
     public void close() throws Exception {
         httpRequestUtil.close();
+    }
+
+    @Override
+    public WechatSubAccountResData subAccount(SubAccountParams params, BaseWechatConfig config) throws Exception {
+        HttpInvokeParams<WechatSubAccountResData> invokeParams = convertInvoke(params, config,
+                WechatSubAccountReqData.class, WechatSubAccountResData.class, config.getSubAccountUrl(), SignTypeEnum.HMACSHA256);
+
+        return httpsInvoke(invokeParams);
+
+    }
+
+    @Override
+    public WechatSubAccountResData multiSubAccount(SubAccountParams params, BaseWechatConfig config) throws Exception {
+        HttpInvokeParams<WechatSubAccountResData> invokeParams = convertInvoke(params, config,
+                WechatSubAccountReqData.class, WechatSubAccountResData.class, config.getSubAccountMultiUrl(), SignTypeEnum.HMACSHA256);
+
+        return httpsInvoke(invokeParams);
+    }
+
+    @Override
+    public WechatSubAccountQueryResData subAccountQuery(SubAccountQueryParams params, BaseWechatConfig config) throws Exception {
+        HttpInvokeParams<WechatSubAccountQueryResData> invokeParams = convertInvoke(params, config,
+                WechatSubAccountQueryReqData.class, WechatSubAccountQueryResData.class, config.getSubAccountQueryUrl(), SignTypeEnum.HMACSHA256);
+
+        return httpInvoke(invokeParams);
+    }
+
+    @Override
+    public WechatSubAccountReceiverData subAccountAddReceiver(SubAccountReceiverParams params, BaseWechatConfig config) throws Exception {
+        HttpInvokeParams<WechatSubAccountReceiverData> invokeParams = convertInvoke(params, config,
+                WechatSubAccountReceiverData.class, WechatSubAccountReceiverData.class, config.getSubAccountAddReceiverUrl(), SignTypeEnum.HMACSHA256);
+
+        return httpInvoke(invokeParams);
+    }
+
+    @Override
+    public WechatSubAccountReceiverData subAccountDelReceiver(SubAccountReceiverParams params, BaseWechatConfig config) throws Exception {
+        HttpInvokeParams<WechatSubAccountReceiverData> invokeParams = convertInvoke(params, config,
+                WechatSubAccountReceiverData.class, WechatSubAccountReceiverData.class, config.getSubAccountDelReceiverUrl(), SignTypeEnum.HMACSHA256);
+
+        return httpInvoke(invokeParams);
+    }
+
+    @Override
+    public WechatSubAccountFinishResData subAccountFinish(SubAccountReceiverParams params, BaseWechatConfig config) throws Exception {
+        HttpInvokeParams<WechatSubAccountFinishResData> invokeParams = convertInvoke(params, config,
+                WechatSubAccountFinishReqData.class, WechatSubAccountFinishResData.class, config.getSubAccountFinishUrl(), SignTypeEnum.HMACSHA256);
+
+        return httpsInvoke(invokeParams);
     }
 
 

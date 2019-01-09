@@ -4,10 +4,11 @@ import cn.aposoft.ecommerce.wechat.beans.invoke.HttpInvokeParams;
 import cn.aposoft.ecommerce.wechat.beans.protocol.BaseRequestBeans;
 import cn.aposoft.ecommerce.wechat.beans.protocol.downloadbill_protocol.WechatDownloadBillResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.pay_protocol.WeChatPayReqData;
-import cn.aposoft.ecommerce.wechat.beans.protocol.pay_query_protocol.WechatPayQueryReqData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.pay_query_protocol.WechatPayQueryResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_protocol.WeChatRefundResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_query_protocol.WechatRefundQueryResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_finish_protocol.WechatSubAccountFinishReqData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_query_protocol.WechatSubAccountQueryReqData;
 import cn.aposoft.ecommerce.wechat.config.BaseWechatConfig;
 import cn.aposoft.ecommerce.wechat.enums.BillTypeEnum;
 import cn.aposoft.ecommerce.wechat.enums.SignTypeEnum;
@@ -15,7 +16,6 @@ import cn.aposoft.ecommerce.wechat.exceptions.VerifySignFailException;
 import cn.aposoft.ecommerce.wechat.httpclient.HttpRequestUtil;
 import cn.aposoft.ecommerce.wechat.params.DownloadBillParams;
 import cn.aposoft.ecommerce.wechat.params.OrderParams;
-import cn.aposoft.ecommerce.wechat.params.OrderQueryParams;
 import cn.aposoft.ecommerce.wechat.parser.*;
 import cn.aposoft.ecommerce.wechat.service.BasePaymentService;
 import cn.aposoft.ecommerce.wechat.tencent.WechatConstant;
@@ -83,14 +83,25 @@ public abstract class AbstractBasePaymentService implements BasePaymentService {
     }
 
     private void setAccountData(BaseWechatConfig config, BaseRequestBeans data, String signType) {
-        data.setAppid(config.getAppID())
-                .setMch_id(config.getMchID())
-                .setSub_appid(config.getSubAppId())
-                .setSub_mch_id(config.getSubMchId())
-        ;
 
+
+        //分账完结接口，sub_appid不用填写
+        if (data instanceof WechatSubAccountFinishReqData) {
+            data.setAppid(config.getAppID());
+            //分账查询接口，appid和sub_appid不用填写
+        } else if (isNotSubAccountQueryClass(data)) {//其他接口目前都需要填写
+            data.setAppid(config.getAppID());
+            data.setSub_appid(config.getSubAppId());
+        }
+        data.setMch_id(config.getMchID())
+                .setSub_mch_id(config.getSubMchId());
+        //签名必须放在最后，保证所有参数赋值完成后进行签名的创建
         data.generateSign(config.getKey(), data, signType);
 
+    }
+
+    private boolean isNotSubAccountQueryClass(BaseRequestBeans data) {
+        return !(data instanceof WechatSubAccountQueryReqData);
     }
 
     //------

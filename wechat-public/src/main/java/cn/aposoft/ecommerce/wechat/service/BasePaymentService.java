@@ -6,6 +6,10 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.pay_protocol.WeChatPayResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.pay_query_protocol.WechatPayQueryResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_protocol.WeChatRefundResData;
 import cn.aposoft.ecommerce.wechat.beans.protocol.refund_query_protocol.WechatRefundQueryResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_finish_protocol.WechatSubAccountFinishResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_protocol.WechatSubAccountResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_query_protocol.WechatSubAccountQueryResData;
+import cn.aposoft.ecommerce.wechat.beans.protocol.sub_account_receiver_protocol.WechatSubAccountReceiverData;
 import cn.aposoft.ecommerce.wechat.config.BaseWechatConfig;
 import cn.aposoft.ecommerce.wechat.params.*;
 
@@ -152,4 +156,53 @@ public interface BasePaymentService {
     List<WechatDownloadBillResData> downloadBill(DownloadBillParams params, BaseWechatConfig config) throws Exception;
 
     void close() throws Exception;
+
+    /**
+     * 单次分账请求接口
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountResData subAccount(SubAccountParams params, BaseWechatConfig config) throws Exception;
+
+    /**
+     * 多次分账请求
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    WechatSubAccountResData multiSubAccount(SubAccountParams params, BaseWechatConfig config) throws Exception;
+
+    /**
+     * 分账查询接口
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountQueryResData subAccountQuery(SubAccountQueryParams params, BaseWechatConfig config) throws Exception;
+
+    /**
+     * 添加分账接收人接口
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountReceiverData subAccountAddReceiver(SubAccountReceiverParams params, BaseWechatConfig config) throws Exception;
+
+    /**
+     * 删除分账接收人
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountReceiverData subAccountDelReceiver(SubAccountReceiverParams params, BaseWechatConfig config) throws Exception;
+
+    /**
+     * 完结分账接口
+     *
+     * @param params
+     * @return
+     */
+    WechatSubAccountFinishResData subAccountFinish(SubAccountReceiverParams params, BaseWechatConfig config) throws Exception;
+
 }

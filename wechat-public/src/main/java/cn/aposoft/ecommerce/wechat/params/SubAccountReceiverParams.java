@@ -12,4 +12,5 @@ import java.io.Serializable;
  * @Created on 2019/1/5下午3:09
  */
 public interface SubAccountReceiverParams extends Serializable {
+    public String getReceiver();
 }
