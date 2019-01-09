@@ -24,6 +24,7 @@ public class HttpInvokeParams<T> implements Serializable {
     private String url;
 
     private SignTypeEnum signTypeEnum;
+    private String signType;
 
 
     public Object getRequestParams() {
@@ -77,6 +78,15 @@ public class HttpInvokeParams<T> implements Serializable {
 
     public HttpInvokeParams setSignTypeEnum(SignTypeEnum signTypeEnum) {
         this.signTypeEnum = signTypeEnum;
+        return this;
+    }
+
+    public String getSignType() {
+        return signType;
+    }
+
+    public HttpInvokeParams<T> setSignType(String signType) {
+        this.signType = signType;
         return this;
     }
 }

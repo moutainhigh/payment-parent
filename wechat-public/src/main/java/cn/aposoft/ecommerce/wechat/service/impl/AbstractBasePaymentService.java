@@ -78,8 +78,17 @@ public abstract class AbstractBasePaymentService implements BasePaymentService {
 
     protected <T> String createXmlRequest(HttpInvokeParams<T> params) throws Exception {
         BaseRequestBeans data = (BaseRequestBeans) BeanConvertUtils.convert(params.getRequestParams(), params.getRequestBean());
-        setAccountData(params.getConfig(), data, params.getSignTypeEnum().name());
+        setAccountData(params.getConfig(), data, getSignType(params.getSignTypeEnum()));
         return WechatUtil.ObjectToXml(data);
+    }
+
+    protected String getSignType(SignTypeEnum signTypeEnum) {
+        if (signTypeEnum == null || SignTypeEnum.MD5 == signTypeEnum) {
+            return WechatConstant.MD5;
+        } else if (SignTypeEnum.HMACSHA256 == signTypeEnum) {
+            return WechatConstant.HMACSHA256;
+        }
+        return null;
     }
 
     private void setAccountData(BaseWechatConfig config, BaseRequestBeans data, String signType) {
