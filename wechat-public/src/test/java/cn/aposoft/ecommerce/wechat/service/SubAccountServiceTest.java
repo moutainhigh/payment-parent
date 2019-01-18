@@ -38,6 +38,14 @@ public class SubAccountServiceTest extends BaseAppTest {
     }
 
     @Test
+    public void multiSubAccount() throws Exception {
+        SubAccountParams params = getMultiSubAccountParams();
+        WechatSubAccountResData result = paymentService.multiSubAccount(params);
+        System.out.println("请求分账返回：" + JSON.toJSONString(result));
+        Assert.assertNotNull(result);
+    }
+
+    @Test
     public void subAccountQuery() throws Exception {
         SubAccountQueryParams params = getSubAccountQueryParams();
         WechatSubAccountQueryResData result = paymentService.subAccountQuery(params);
@@ -147,7 +155,24 @@ public class SubAccountServiceTest extends BaseAppTest {
                 .setReceivers("[" +
                         "{" +
                         "\"account\":\"codejiayou\"," +
-                        "\"amount\":10,\n" +
+                        "\"amount\":1,\n" +
+                        "\"description\":\"channel分账测试\"," +
+                        "\"type\":\"PERSONAL_WECHATID\"" +
+                        "}" +
+                        "]");
+        return dto;
+    }
+
+    private SubAccountParams getMultiSubAccountParams() {
+        SubAccountParamsDTO dto = new SubAccountParamsDTO();
+        dto.setOut_order_no("sub_" + System.currentTimeMillis())
+
+                .setSign_type(WechatConstant.HMACSHA256)
+                .setTransaction_id("4200000250201901184002407716")
+                .setReceivers("[" +
+                        "{" +
+                        "\"account\":\"codejiayou\"," +
+                        "\"amount\":1,\n" +
                         "\"description\":\"channel分账测试\"," +
                         "\"type\":\"PERSONAL_WECHATID\"" +
                         "}" +

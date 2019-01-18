@@ -24,7 +24,7 @@
 
 ####Update 记录
 
-2018-08-29
+##### 2018-08-29
 
 新增`wechat-public`，**<font color=blue>微信公众号服务商版</font>**支付模块。
 
@@ -34,10 +34,15 @@
 2. 查询订单  https://pay.weixin.qq.com/wiki/doc/api/jsapi_sl.php?chapter=9_2
 3. 关闭订单  https://pay.weixin.qq.com/wiki/doc/api/jsapi_sl.php?chapter=9_3
 4. 申请退款  https://pay.weixin.qq.com/wiki/doc/api/jsapi_sl.php?chapter=9_4
-5. 查询退款 https://pay.weixin.qq.com/wiki/doc/api/jsapi_sl.php?chapter=9_5
-6. 下载对账单 https://pay.weixin.qq.com/wiki/doc/api/jsapi_sl.php?chapter=9_6
+5. 查询退款  https://pay.weixin.qq.com/wiki/doc/api/jsapi_sl.php?chapter=9_5
+6. 下载对账单  https://pay.weixin.qq.com/wiki/doc/api/jsapi_sl.php?chapter=9_6
 7. 验签接口
 
 http资源关闭采用1.8方式的自动关闭方式操作，参见单元测试中的`cn.aposoft.ecommerce.wechat.service.PaymentServiceTest#payTest()`方法
 
 
+##### 2019-01-18
+
+新增服务商模式的分账功能(该功能微信尚处于内测阶段)
+
+地址：https://pay.weixin.qq.com/wiki/doc/api/allocation_sl.php?chapter=24_1&index=1
