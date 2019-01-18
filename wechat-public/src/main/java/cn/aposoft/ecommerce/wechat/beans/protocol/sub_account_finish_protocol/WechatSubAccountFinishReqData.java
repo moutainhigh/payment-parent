@@ -15,23 +15,23 @@ import cn.aposoft.ecommerce.wechat.beans.protocol.BaseRequestBeans;
 public class WechatSubAccountFinishReqData extends BaseRequestBeans {
 
     /**
-     * 签名类型，目前只支持HMAC-SHA256
+     * 选填.签名类型，目前只支持HMAC-SHA256
      */
     private String sign_type;
     /**
-     * 微信订单号
+     * 必填.微信订单号
      */
     private String transaction_id;
     /**
-     * 商户分账单号
+     * 必填.商户分账单号
      */
     private String out_order_no;
     /**
-     * 商户分账金额
+     * 必填.商户分账金额
      */
     private int amount;
     /**
-     * 分账完结描述
+     * 必填.分账完结描述
      */
     private String description;
 

@@ -165,7 +165,7 @@ public class BasePaymentServiceImpl extends AbstractBasePaymentService {
     }
 
     @Override
-    public WechatSubAccountFinishResData subAccountFinish(SubAccountReceiverParams params, BaseWechatConfig config) throws Exception {
+    public WechatSubAccountFinishResData subAccountFinish(SubAccountFinishParams params, BaseWechatConfig config) throws Exception {
         HttpInvokeParams<WechatSubAccountFinishResData> invokeParams = convertInvoke(params, config,
                 WechatSubAccountFinishReqData.class, WechatSubAccountFinishResData.class, config.getSubAccountFinishUrl(), SignTypeEnum.HMACSHA256);
 

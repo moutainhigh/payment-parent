@@ -203,6 +203,6 @@ public interface BasePaymentService {
      * @param params
      * @return
      */
-    WechatSubAccountFinishResData subAccountFinish(SubAccountReceiverParams params, BaseWechatConfig config) throws Exception;
+    WechatSubAccountFinishResData subAccountFinish(SubAccountFinishParams params, BaseWechatConfig config) throws Exception;
 
 }

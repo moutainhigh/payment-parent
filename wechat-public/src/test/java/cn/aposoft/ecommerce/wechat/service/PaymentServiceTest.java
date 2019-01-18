@@ -179,7 +179,7 @@ public class PaymentServiceTest extends BaseAppTest {
     private RefundParamsDTO getRefundData() {
         RefundParamsDTO data = new RefundParamsDTO();
         data.setOut_refund_no(DateUtils.formatDate(new Date(), "yyyMMddHHmmss"))
-                .setTransaction_id("4200000139201808179060622869")
+                .setTransaction_id("4200000253201901181546230059")
                 .setRefund_fee(1)
                 .setTotal_fee(1)
         ;

@@ -16,7 +16,7 @@ public interface SubAccountFinishParams extends Serializable {
 
 
     /**
-     * 签名类型，目前只支持HMAC-SHA256
+     * 选填.签名类型，目前只支持HMAC-SHA256
      */
     public String getSign_type();
 

@@ -209,7 +209,7 @@ public interface PaymentService extends AutoCloseable {
      * @param params
      * @return
      */
-    WechatSubAccountFinishResData subAccountFinish(SubAccountReceiverParams params) throws Exception;
+    WechatSubAccountFinishResData subAccountFinish(SubAccountFinishParams params) throws Exception;
 
     void close() throws Exception;
 }

@@ -227,7 +227,7 @@ public class PaymentServiceImpl implements PaymentService, AutoCloseable {
     }
 
     @Override
-    public WechatSubAccountFinishResData subAccountFinish(SubAccountReceiverParams params) throws Exception {
+    public WechatSubAccountFinishResData subAccountFinish(SubAccountFinishParams params) throws Exception {
         checkWechatConfig(config, UrlEnum.SUB_ACCOUNT_FINISH_URL);//TODO
         return basePaymentService.subAccountFinish(params,config);
     }
