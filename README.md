@@ -46,3 +46,9 @@ http资源关闭采用1.8方式的自动关闭方式操作，参见单元测试�
 新增服务商模式的分账功能(该功能微信尚处于内测阶段)
 
 地址：https://pay.weixin.qq.com/wiki/doc/api/allocation_sl.php?chapter=24_1&index=1
+
+
+**如果对您有帮助，请捐赠以表支持，code在此非常感谢您的慷慨。**<br>
+![][alipay]
+[alipay]:doc/aliapy.png
+
