@@ -1,7 +1,18 @@
 # payment-parent
 支付项目
-子项:支付宝支付项目 V1.0
-完成支付宝项目的多个业务接口,目前在开发中
+
+* 模块说明
+
+|模块名称|说明|
+|---|---|
+|alipay-payment | 旧版支付宝扫码支付|
+|alipay-payment2 | 未完成|
+|csh-payment |未完成 |
+| DimensionalCode| 二维码创建与解析模块|
+|wechat-demo | 微信扫码支付测试demo|
+| wechat-payment|微信普通商户版扫码支付 |
+| wechat-public| 微信服务商版支付 |
+
 
 子项:微信支付项目 V1.0
 系统主要由 cn.aposoft.ecommerce.payment.wechat.PaymentService接口的具体实现来完成微信支付相关的主要功能.
