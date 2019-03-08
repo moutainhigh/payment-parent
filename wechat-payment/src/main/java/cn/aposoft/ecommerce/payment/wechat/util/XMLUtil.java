@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,108 +23,125 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XMLUtil {
-	/**
-	 * 将返回的字符串xml进行map解析
-	 * 
-	 * @param xmlString
-	 * @return 返回xml字符串解析生成的Map对象
-	 * @throws ParserConfigurationException
-	 * @throws IOException
-	 * @throws SAXException
-	 */
-	public static Map<String, String> getMapFromXML(String xmlString)
-			throws ParserConfigurationException, IOException, SAXException {
+    /**
+     * 将返回的字符串xml进行map解析
+     *
+     * @param xmlString
+     * @return 返回xml字符串解析生成的Map对象
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
+    public static Map<String, String> getMapFromXML(String xmlString)
+            throws ParserConfigurationException, IOException, SAXException {
 
-		// 这里用Dom的方式解析回包的最主要目的是防止API新增回包字段
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-		InputStream is = getStringStream(xmlString);
-		Document document = builder.parse(is);
+        // 这里用Dom的方式解析回包的最主要目的是防止API新增回包字段
+        DocumentBuilderFactory factory = getDocumentBuilderFactory();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        InputStream is = getStringStream(xmlString);
+        Document document = builder.parse(is);
 
-		// 获取到document里面的全部结点
-		NodeList allNodes = document.getFirstChild().getChildNodes();
-		Node node;
-		Map<String, String> map = new HashMap<String, String>();
-		int i = 0;
-		while (i < allNodes.getLength()) {
-			node = allNodes.item(i);
-			if (node instanceof Element) {
-				map.put(node.getNodeName(), node.getTextContent());
-			}
-			i++;
-		}
-		return map;
-	}
+        // 获取到document里面的全部结点
+        NodeList allNodes = document.getFirstChild().getChildNodes();
+        Node node;
+        Map<String, String> map = new HashMap<String, String>();
+        int i = 0;
+        while (i < allNodes.getLength()) {
+            node = allNodes.item(i);
+            if (node instanceof Element) {
+                map.put(node.getNodeName(), node.getTextContent());
+            }
+            i++;
+        }
+        return map;
+    }
 
-	public static String createXML(Object o) throws IllegalAccessException {
-		SortedMap<String, String> parameters = new TreeMap<String, String>();
-		Class<?> cls = o.getClass();
-		Field[] fields = cls.getDeclaredFields();
-		for (Field f : fields) {
-			f.setAccessible(true);
-			Object v = f.get(o);
-			if (v != null && v != "") {
-				parameters.put(f.getName(), CommonUtil.toString(v));
-			}
+    /**
+     * 防止外部实体注入，xml漏洞攻击解决
+     *
+     * @return
+     * @throws ParserConfigurationException
+     */
+    private static DocumentBuilderFactory getDocumentBuilderFactory() throws ParserConfigurationException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
+        return factory;
+    }
 
-		}
-		/**
-		 * 迭代读取父类
-		 */
-		for (Class<?> superCls = cls.getSuperclass(); superCls != null; superCls = superCls.getSuperclass()) {
-			fields = superCls.getDeclaredFields();
-			for (Field f : fields) {
-				f.setAccessible(true);
-				Object v = f.get(o);
-				if (v != null && v != "") {
-					parameters.put(f.getName(), CommonUtil.toString(v));
-				}
-			}
-		}
+    public static String createXML(Object o) throws IllegalAccessException {
+        SortedMap<String, String> parameters = new TreeMap<String, String>();
+        Class<?> cls = o.getClass();
+        Field[] fields = cls.getDeclaredFields();
+        for (Field f : fields) {
+            f.setAccessible(true);
+            Object v = f.get(o);
+            if (v != null && v != "") {
+                parameters.put(f.getName(), CommonUtil.toString(v));
+            }
 
-		return createXML(parameters);
-	}
+        }
+        /**
+         * 迭代读取父类
+         */
+        for (Class<?> superCls = cls.getSuperclass(); superCls != null; superCls = superCls.getSuperclass()) {
+            fields = superCls.getDeclaredFields();
+            for (Field f : fields) {
+                f.setAccessible(true);
+                Object v = f.get(o);
+                if (v != null && v != "") {
+                    parameters.put(f.getName(), CommonUtil.toString(v));
+                }
+            }
+        }
 
-	/**
-	 * 创建xml发送串
-	 * 
-	 * @param parameters
-	 *            传入的报文内容参数Map
-	 * @return 发送报文的xml字符串形式
-	 */
-	public static String createXML(SortedMap<String, String> parameters) {
-		StringBuilder buffer = new StringBuilder();
-		buffer.append("<xml>");
-		for (Entry<String, String> entry : parameters.entrySet()) {
-			String k = entry.getKey();
-			String v = entry.getValue();
-			if (v != null && !"".equals(v)) {
-				buffer.append("<" + k + ">" + v + "</" + k + ">" + "\r\n");
-			}
-		}
-		buffer.append("</xml>");
-		return buffer.toString();
-	}
+        return createXML(parameters);
+    }
 
-	/**
-	 * 字符串转输入流
-	 * 
-	 * @param sInputString
-	 * @return
-	 */
-	public static InputStream getStringStream(String sInputString) {
-		ByteArrayInputStream tInputStringStream = null;
-		if (sInputString != null && !sInputString.trim().equals("")) {
-			byte[] bytes;
-			try {
-				bytes = sInputString.getBytes("UTF-8");
-				tInputStringStream = new ByteArrayInputStream(bytes);
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+    /**
+     * 创建xml发送串
+     *
+     * @param parameters 传入的报文内容参数Map
+     * @return 发送报文的xml字符串形式
+     */
+    public static String createXML(SortedMap<String, String> parameters) {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("<xml>");
+        for (Entry<String, String> entry : parameters.entrySet()) {
+            String k = entry.getKey();
+            String v = entry.getValue();
+            if (v != null && !"".equals(v)) {
+                buffer.append("<" + k + ">" + v + "</" + k + ">" + "\r\n");
+            }
+        }
+        buffer.append("</xml>");
+        return buffer.toString();
+    }
 
-		}
-		return tInputStringStream;
-	}
+    /**
+     * 字符串转输入流
+     *
+     * @param sInputString
+     * @return
+     */
+    public static InputStream getStringStream(String sInputString) {
+        ByteArrayInputStream tInputStringStream = null;
+        if (sInputString != null && !sInputString.trim().equals("")) {
+            byte[] bytes;
+            try {
+                bytes = sInputString.getBytes("UTF-8");
+                tInputStringStream = new ByteArrayInputStream(bytes);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return tInputStringStream;
+    }
 
 }
