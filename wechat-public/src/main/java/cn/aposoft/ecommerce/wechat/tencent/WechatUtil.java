@@ -95,7 +95,7 @@ public class WechatUtil {
      * @return XML数据转换后的Map
      * @throws Exception
      */
-    public static Map<String, String> xmlToMap(String strXML) throws Exception {
+    public static Map<String, String> xmlToMap(String strXML) throws IOException, SAXException, ParserConfigurationException {
         try {
             Map<String, String> data = new HashMap<String, String>();
             DocumentBuilder documentBuilder = newDocumentBuilder();
@@ -116,7 +116,7 @@ public class WechatUtil {
                 // do nothing
             }
             return data;
-        } catch (Exception ex) {
+        } catch (SAXException|IOException|ParserConfigurationException ex) {
             LogPortal.error("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXML);
             throw ex;
         }
@@ -284,6 +284,9 @@ public class WechatUtil {
     public static String getLocalXMLString(String localPath) throws IOException {
         return WechatUtil.inputStreamToString(WechatUtil.class.getResourceAsStream(localPath));
     }
-
+    public static <T> T convertXmlToObject(String xml, Class<T> clazz) throws Exception {
+        Map<String, String> map = WechatUtil.xmlToMap(xml);
+        return JSON.parseObject(JSON.toJSONString(map), clazz);
+    }
 }
 

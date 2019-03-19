@@ -1,11 +1,18 @@
 package cn.aposoft.ecommerce.wechat.tencent;
 
 import cn.aposoft.ecommerce.wechat.enums.SignTypeEnum;
+import cn.aposoft.ecommerce.wechat.exceptions.VerifySignFailException;
 import cn.aposoft.ecommerce.wechat.util.LogPortal;
+import org.xml.sax.SAXException;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +36,7 @@ public class WechatSignature {
      * @return 签名是否正确
      * @throws Exception
      */
-    public static boolean verifySignWithHMACSHA256(String xml, String key) throws Exception {
+    public static boolean verifySignWithHMACSHA256(String xml, String key) throws ParserConfigurationException, SAXException, IOException, NoSuchAlgorithmException, InvalidKeyException, VerifySignFailException {
         return verifySign(WechatUtil.xmlToMap(xml), key, SignTypeEnum.HMACSHA256);
     }
 
@@ -55,7 +62,7 @@ public class WechatSignature {
      * @return 签名是否正确
      * @throws Exception
      */
-    public static boolean verifySign(Map<String, String> data, String key, SignTypeEnum signType) throws Exception {
+    public static boolean verifySign(Map<String, String> data, String key, SignTypeEnum signType) throws NoSuchAlgorithmException, VerifySignFailException, InvalidKeyException, UnsupportedEncodingException {
         if (!data.containsKey(WechatConstant.SIGN)) {
             return false;
         }
@@ -71,7 +78,7 @@ public class WechatSignature {
      * @param key  API密钥
      * @return 签名
      */
-    public static String generateSignatureWithHMACSHA256(final Map<String, String> data, String key) throws Exception {
+    public static String generateSignatureWithHMACSHA256(final Map<String, String> data, String key) throws NoSuchAlgorithmException, VerifySignFailException, InvalidKeyException, UnsupportedEncodingException {
         return generateSignature(data, key, SignTypeEnum.HMACSHA256);
     }
     /**
@@ -81,7 +88,7 @@ public class WechatSignature {
      * @param key  API密钥
      * @return 签名
      */
-    public static String generateSignatureWithMD5(final Map<String, String> data, String key) throws Exception {
+    public static String generateSignatureWithMD5(final Map<String, String> data, String key) throws NoSuchAlgorithmException, VerifySignFailException, InvalidKeyException, UnsupportedEncodingException {
         return generateSignature(data, key, SignTypeEnum.MD5);
     }
     /**
@@ -93,7 +100,7 @@ public class WechatSignature {
      * @return
      * @throws Exception
      */
-    public static String generateSignature(final Map<String, String> data, String key, SignTypeEnum signType) throws Exception {
+    public static String generateSignature(final Map<String, String> data, String key, SignTypeEnum signType) throws VerifySignFailException, NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         String[] keyArray = sortKey(data);
         StringBuilder sb = new StringBuilder();
         for (String k : keyArray) {
@@ -110,7 +117,7 @@ public class WechatSignature {
         } else if (SignTypeEnum.HMACSHA256.equals(signType)) {
             return HMACSHA256(sb.toString(), key);
         } else {
-            throw new Exception(String.format("Invalid sign_type: %s", signType));
+            throw new VerifySignFailException(String.format("Invalid sign_type: %s", signType));
         }
     }
 
@@ -133,7 +140,7 @@ public class WechatSignature {
      * @param data 待处理数据
      * @return MD5结果
      */
-    public static String MD5(String data) throws Exception {
+    public static String MD5(String data) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] array = md.digest(data.getBytes("UTF-8"));
         StringBuilder sb = new StringBuilder();
@@ -151,7 +158,7 @@ public class WechatSignature {
      * @return 加密结果
      * @throws Exception
      */
-    public static String HMACSHA256(String data, String key) throws Exception {
+    public static String HMACSHA256(String data, String key) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
         Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
         SecretKeySpec secret_key = new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA256");
         sha256_HMAC.init(secret_key);
