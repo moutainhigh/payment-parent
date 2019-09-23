@@ -72,3 +72,12 @@
   ```
  
  其他更详细的的mock以及Junit测试参考地址：[https://github.com/os-technology/books/blob/dev/JunitMockTest/doc/JunitMockTest.md](https://github.com/os-technology/books/blob/dev/JunitMockTest/doc/JunitMockTest.md)
+
+
+## FAQ
+
+下单账户与支付账户不一致
+示例：二维码下单，由于添加了子商户subopenid导致，只需要去掉该参数即可
+小程序支付，信用卡付款，退款后，退款通知迟迟未收到。
+原因：可能由于渠道问题，导致信用卡退款到账如果没有回到卡里，微信是不会进行回调通知导致的。因为如果使用零钱支付，退款，对应的退款通知会很快收到。
+ 
