@@ -37,7 +37,8 @@
 		<module>alipay-payment2</module>
 		<module>DimensionalCode</module>
 		<module>wechat-public</module>
-	</modules>
+        <module>cmb-payment</module>
+    </modules>
 
 	<dependencyManagement>
 		<dependencies>

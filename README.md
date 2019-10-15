@@ -12,6 +12,7 @@
 |wechat-demo | 微信扫码支付测试demo|
 | wechat-payment|微信普通商户版扫码支付 |
 | wechat-public| 微信服务商版支付 |
+|cmb-payment|招商银行，银企直联模块|
 
 
 子项:微信支付项目 V1.0
@@ -63,3 +64,6 @@ http资源关闭采用1.8方式的自动关闭方式操作，参见单元测试�
 
 <img src="https://images.gitee.com/uploads/images/2019/0122/104135_26cef806_2275632.jpeg" width="300">
 
+##### 2019-10-15
+
+新增招商银行银企直联模块，文档地址：https://u.ebank.cmbchina.com/CmbBank_GenShell/UI/Help/DCBank2/DownLoad.aspx
