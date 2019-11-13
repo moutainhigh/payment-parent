@@ -1,6 +1,8 @@
 package com.shui.payment.cmb.parser;
 
 import com.alibaba.fastjson.JSON;
+import com.shui.payment.cmb.beans.accounttradequeryprotocol.AccountPayQueryResData;
+import com.shui.payment.cmb.beans.accounttradequeryprotocol.AccountTradeResData;
 import com.shui.payment.cmb.beans.directpayprotocol.CmbDirectPayResData;
 import com.shui.payment.cmb.beans.querylistprotocol.CmbOrderResData;
 import com.shui.payment.cmb.beans.querylistprotocol.CmbQueryListResData;
@@ -19,15 +21,18 @@ import java.util.*;
 @Slf4j
 public class CmbRequestUtil {
 
+
     /**
-     * 生成直接支付的请求报文
+     * 生成多笔交易 直接支付的请求报文
      */
-    public static String getDirectPayRequestStr(String funcName, String loginName, String businessType, Map dataMap) {
+    public static String getBatchDirectPayRequestStr(String funcName, String loginName, String businessType, List<Map> dataMap) {
         XmlPacket xmlPkt = new XmlPacket(funcName, loginName);
         Map mpPodInfo = new Properties();
         mpPodInfo.put("BUSCOD", businessType);
         xmlPkt.putProperty("SDKPAYRQX", mpPodInfo);
-        xmlPkt.putProperty("DCOPDPAYX", dataMap);
+        for (Map map : dataMap) {
+            xmlPkt.putProperty("DCOPDPAYX", map);
+        }
 
         return xmlPkt.toXmlString();
     }
@@ -90,15 +95,15 @@ public class CmbRequestUtil {
         //返回码为成功时的数据对象转换
         if ("0".equals(xmlPacket.getRETCOD())) {
 
-            resData.setChannelSerialNo(propPayResult.get(CmbParamsName.SQRNBR) == null ? null : String.valueOf(propPayResult.get(CmbParamsName.SQRNBR)))
-                    .setQdsOrderNo(propPayResult.get(CmbParamsName.YURREF) == null ? null : String.valueOf(propPayResult.get(CmbParamsName.YURREF)))
-                    .setChannelOrderNo(propPayResult.get(CmbParamsName.REQNBR) == null ? null : String.valueOf(propPayResult.get(CmbParamsName.REQNBR)))
-                    .setRequestStatus(propPayResult.get(CmbParamsName.REQSTS) == null ? null : String.valueOf(propPayResult.get(CmbParamsName.REQSTS)))
-                    .setBizResult(propPayResult.get(CmbParamsName.RTNFLG) == null ? null : String.valueOf(propPayResult.get(CmbParamsName.RTNFLG)))
-                    .setPendingSequence(propPayResult.get(CmbParamsName.OPRSQN) == null ? null : String.valueOf(propPayResult.get(CmbParamsName.OPRSQN)))
-                    .setOperateAlias(propPayResult.get(CmbParamsName.OPRALS) == null ? null : String.valueOf(propPayResult.get(CmbParamsName.OPRALS)))
-                    .setErrCode(propPayResult.get(CmbParamsName.ERRCOD) == null ? null : String.valueOf(propPayResult.get(CmbParamsName.ERRCOD)))
-                    .setErrMsg(propPayResult.get(CmbParamsName.ERRTXT) == null ? null : String.valueOf(propPayResult.get(CmbParamsName.ERRTXT)))
+            resData.setChannelSerialNo(getMapValue(propPayResult, CmbParamsName.SQRNBR))
+                    .setQdsOrderNo(getMapValue(propPayResult, CmbParamsName.YURREF))
+                    .setChannelOrderNo(getMapValue(propPayResult, CmbParamsName.REQNBR))
+                    .setRequestStatus(getMapValue(propPayResult, CmbParamsName.REQSTS))
+                    .setBizResult(getMapValue(propPayResult, CmbParamsName.RTNFLG))
+                    .setPendingSequence(getMapValue(propPayResult, CmbParamsName.OPRSQN))
+                    .setOperateAlias(getMapValue(propPayResult, CmbParamsName.OPRALS))
+                    .setErrCode(getMapValue(propPayResult, CmbParamsName.ERRCOD))
+                    .setErrMsg(getMapValue(propPayResult, CmbParamsName.ERRTXT))
             ;
 
         }
@@ -228,26 +233,107 @@ public class CmbRequestUtil {
 
     private static CmbOrderResData convertCmbOrderResData(Map map) {
         CmbOrderResData data = new CmbOrderResData();
-        data.setChannelOrderNo(String.valueOf(map.get(CmbParamsName.REQNBR)))
-                .setBizType(String.valueOf(map.get(CmbParamsName.BUSCOD)))
-                .setBizMode(String.valueOf(map.get(CmbParamsName.BUSMOD)))
-                .setCmbBranchNo(String.valueOf(map.get(CmbParamsName.DBTBBK)))
-                .setPayAccountNo(String.valueOf(map.get(CmbParamsName.DBTACC)))
-                .setAcceptBranchNo(String.valueOf(map.get(CmbParamsName.CRTBBK)))
-                .setAcceptAccountNo(String.valueOf(map.get(CmbParamsName.CRTACC)))
-                .setAcceptAccountName(String.valueOf(map.get(CmbParamsName.CRTNAM)))
-                .setCny(String.valueOf(map.get(CmbParamsName.CCYNBR)))
-                .setOrderAmt(String.valueOf(map.get(CmbParamsName.TRSAMT)))
-                .setQueryDate(String.valueOf(map.get(CmbParamsName.EPTDAT)))
-                .setQueryTime(String.valueOf(map.get(CmbParamsName.EPTTIM)))
-                .setOperateDate(String.valueOf(map.get(CmbParamsName.OPRDAT)))
-                .setQdsOrderNo(String.valueOf(map.get(CmbParamsName.YURREF)))
-                .setRequestStatus(String.valueOf(map.get(CmbParamsName.REQSTS)))
-                .setBizResult(String.valueOf(map.get(CmbParamsName.RTNFLG)))
-                .setContainFile(String.valueOf(map.get(CmbParamsName.ATHFLG)))
-                .setRemark(String.valueOf(map.get(CmbParamsName.RSV30Z)))
-                .setErrMsg(String.valueOf(map.get(CmbParamsName.ERRTXT)));
+        data.setChannelOrderNo(getMapValue(map, CmbParamsName.REQNBR))
+                .setBizType(getMapValue(map, CmbParamsName.BUSCOD))
+                .setBizMode(getMapValue(map, CmbParamsName.BUSMOD))
+                .setCmbBranchNo(getMapValue(map, CmbParamsName.DBTBBK))
+                .setPayAccountNo(getMapValue(map, CmbParamsName.DBTACC))
+                .setAcceptBranchNo(getMapValue(map, CmbParamsName.CRTBBK))
+                .setAcceptAccountNo(getMapValue(map, CmbParamsName.CRTACC))
+                .setAcceptAccountName(getMapValue(map, CmbParamsName.CRTNAM))
+                .setCny(getMapValue(map, CmbParamsName.CCYNBR))
+                .setOrderAmt(getMapValue(map, CmbParamsName.TRSAMT))
+                .setQueryDate(getMapValue(map, CmbParamsName.EPTDAT))
+                .setQueryTime(getMapValue(map, CmbParamsName.EPTTIM))
+                .setOperateDate(getMapValue(map, CmbParamsName.OPRDAT))
+                .setQdsOrderNo(getMapValue(map, CmbParamsName.YURREF))
+                .setRequestStatus(getMapValue(map, CmbParamsName.REQSTS))
+                .setBizResult(getMapValue(map, CmbParamsName.RTNFLG))
+                .setContainFile(getMapValue(map, CmbParamsName.ATHFLG))
+                .setRemark(getMapValue(map, CmbParamsName.RSV30Z))
+                .setErrMsg(getMapValue(map, CmbParamsName.ERRTXT));
         return data;
     }
 
+    /**
+     * 2.3 查询账户交易明细接口返回结果解析
+     *
+     * @param result
+     * @param dataFlag
+     * @return
+     */
+    public static AccountPayQueryResData processAccountPayQuery(String result, String dataFlag) {
+
+        AccountPayQueryResData resData = new AccountPayQueryResData();
+
+        XmlPacket xmlPacket = XmlPacket.valueOf(result);
+
+        if (xmlPacket == null || (!"0".equals(xmlPacket.getRETCOD()))) {
+            return new AccountPayQueryResData().setReturnCode("FAIL");
+        }
+        resData.setReturnMsg(xmlPacket.getERRMSG())
+                .setReturnCode(getReturnCode(xmlPacket.getRETCOD()));
+        if (!("SUCCESS".equals(resData.getReturnCode()))) {
+            resData.setErrCode(getErrorCode(xmlPacket.getRETCOD()))
+                    .setErrMsg(xmlPacket.getERRMSG());
+            log.info("2.3 查询账户交易返回结果，processAccountPayQuery, 结果解析失败：{}", JSON.toJSONString(resData));
+            return resData;
+        }
+
+        //正常解析返回结果信息
+        List<AccountTradeResData> tradeList = new ArrayList<>();
+        for (int i = 0; i < xmlPacket.getSectionSize(dataFlag); i++) {
+            Map propMap = xmlPacket.getProperty(dataFlag, i);
+            if ("0".equals(xmlPacket.getRETCOD())) {
+                AccountTradeResData trade = getAccountTradeResData(propMap);
+                tradeList.add(trade);
+            }
+        }
+
+        resData.setResData(tradeList);
+        return resData;
+
+    }
+
+    /**
+     * 组装2.3 接口返回数据
+     *
+     * @param propMap
+     * @return
+     */
+    private static AccountTradeResData getAccountTradeResData(Map propMap) {
+        AccountTradeResData trade = new AccountTradeResData();
+        trade.setTradeDate(getMapValue(propMap, CmbParamsName.ETYDAT))
+                .setTradeTime(getMapValue(propMap, CmbParamsName.ETYTIM))
+                .setTypeCode(getMapValue(propMap, CmbParamsName.AMTCDR))
+                .setBankOrderNo(getMapValue(propMap, CmbParamsName.REFNBR))
+                .setQdsOrderNo(getMapValue(propMap, CmbParamsName.YURREF))
+                .setChannelOrderNo(getMapValue(propMap, CmbParamsName.REQNBR))
+                .setTradeType(getMapValue(propMap, CmbParamsName.TRSCOD))
+                .setDesc(getMapValue(propMap, CmbParamsName.NARYUR))
+                .setBorrowAmt(getMapValue(propMap, CmbParamsName.TRSAMTD))
+                .setLoanAmt(getMapValue(propMap, CmbParamsName.TRSAMTC))
+                .setBalanceAmt(getMapValue(propMap, CmbParamsName.TRSBLV))
+                .setBizName(getMapValue(propMap, CmbParamsName.BUSNAM))
+                .setPurpose(getMapValue(propMap, CmbParamsName.NUSAGE))
+                .setBizDesc(getMapValue(propMap, CmbParamsName.BUSNAR))
+                .setClientAreaName(getMapValue(propMap, CmbParamsName.C_RPYBBK))
+                .setClientAccountName(getMapValue(propMap, CmbParamsName.RPYNAM))
+                .setClientAccountNo(getMapValue(propMap, CmbParamsName.RPYACC))
+                .setClientBranchNo(getMapValue(propMap, CmbParamsName.RPYBBN))
+                .setClientBranchName(getMapValue(propMap, CmbParamsName.RPYBNK))
+                .setClientBranchAddress(getMapValue(propMap, CmbParamsName.RPYADR))
+                .setAlphaCompArea(getMapValue(propMap, CmbParamsName.C_GSBBBK))
+                .setAlphaCompAccountNo(getMapValue(propMap, CmbParamsName.GSBACC))
+                .setAlphaCompName(getMapValue(propMap, CmbParamsName.GSBNAM))
+                .setInfoFlag(getMapValue(propMap, CmbParamsName.INFFLG))
+                .setIncludeAttachment(getMapValue(propMap, CmbParamsName.ATHFLG))
+                .setBillNo(getMapValue(propMap, CmbParamsName.CHKNBR))
+                .setReverseFlag(getMapValue(propMap, CmbParamsName.RSVFLG))
+                .setAppendDesc(getMapValue(propMap, CmbParamsName.NAREXT));
+        return trade;
+    }
+    private static String getMapValue(Map map, String key) {
+        return map.get(key) == null ? null : map.get(key).toString();
+    }
 }

@@ -1,15 +1,21 @@
 package com.shui.payment.cmb;
 
 import com.alibaba.fastjson.JSON;
+import com.shui.payment.cmb.beans.accounttradequeryprotocol.AccountPayQueryResData;
+import com.shui.payment.cmb.beans.directpayprotocol.CmbBatchDirectPayResData;
 import com.shui.payment.cmb.beans.directpayprotocol.CmbDirectPayResData;
 import com.shui.payment.cmb.beans.querylistprotocol.CmbQueryListResData;
 import com.shui.payment.cmb.enums.BizTypeEnum;
+import com.shui.payment.cmb.parameters.AccountPayQueryRequest;
 import com.shui.payment.cmb.parameters.DirectPayRequest;
 import com.shui.payment.cmb.parameters.PayQueryListRequest;
 import com.shui.payment.cmb.util.CmbUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 银企直联招行
@@ -25,6 +31,23 @@ public class CmbPaymentServiceHandlerTest extends AppJunitGeneralBaseConfig {
     @Before
     public void testReady() {
         initCmbConfig();
+    }
+
+
+    @Test
+    public void bankAccountTradeQuery() throws Exception {
+        AccountPayQueryRequest request = getAccountPayQueryRequest();
+        AccountPayQueryResData result = cmbPaymentServiceHandler.bankAccountTradeQuery(request, AccountPayQueryResData.class);
+        System.out.println("返回结果："+JSON.toJSONString(result));
+        Assert.assertEquals("SUCCESS", result.getReturnCode());
+    }
+
+    private AccountPayQueryRequest getAccountPayQueryRequest() {
+        AccountPayQueryRequest request = new AccountPayQueryRequest();
+        request//.setPayAreaCode("75")
+                .setStartDate("20191111")
+                .setEndDate("20191112");
+        return request;
     }
 
     @Test
@@ -48,20 +71,29 @@ public class CmbPaymentServiceHandlerTest extends AppJunitGeneralBaseConfig {
     }
 
     @Test
-    public void bankPay() throws Exception {
+    public void bankBatchPay() throws Exception {
         DirectPayRequest request = getDirectPayRequest();
-        CmbDirectPayResData resData = cmbPaymentServiceHandler.bankPay(request, CmbDirectPayResData.class);
+        DirectPayRequest request1 = getDirectPayRequest();
+        request1.setOrderAmt("2.00")
+                .setDescription("第二笔交易");
+
+
+        List<DirectPayRequest> list = new ArrayList<>();
+        list.add(request);
+        list.add(request1);
+        CmbBatchDirectPayResData resData = cmbPaymentServiceHandler.bankBatchPay(list, CmbBatchDirectPayResData.class);
         System.out.println("返回结果：" + JSON.toJSONString(resData));
         Assert.assertEquals("SUCCESS", resData.getReturnCode());
-        Assert.assertEquals("NTE", resData.getRequestStatus());
+//        Assert.assertEquals("NTE", resData.getRequestStatus());
 //        Assert.assertEquals("S",resData.getBizResult());
 
     }
 
+
     private DirectPayRequest getDirectPayRequest() {
         DirectPayRequest request = new DirectPayRequest();
         request.setAcceptAccountNo("6225880230001175")
-                .setAcceptAccountName("刘五")
+//                .setAcceptAccountName("刘五")
                 .setAcceptBankAddress("招商银行重庆分行营业部")
                 .setBankInnerFlag("Y")
                 .setQdsOrderNo(CmbUtil.generateOrderNo("bank_"))

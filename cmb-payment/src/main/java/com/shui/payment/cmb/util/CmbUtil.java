@@ -24,6 +24,14 @@ public class CmbUtil {
     public static final String FORMAT_MS = "yyyyMMddHHmmssSSS";
     private static final String ALLCHAR = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    public static boolean isAllEmpty(CharSequence... css) {
+        for (CharSequence cs : css) {
+            if (StringUtils.isNotEmpty(cs)) {
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * 千丁系统订单号创建
      * 创建规则：yyyyMMddHHmmssSSS + 8位随机字符串

@@ -2,6 +2,7 @@ package com.shui.payment.cmb.impl;
 
 import com.shui.payment.cmb.AbstractCmbPaymentServiceHandler;
 import com.shui.payment.cmb.CmbBankPaymentService;
+import com.shui.payment.cmb.beans.accounttradequeryprotocol.AccountPayQueryReqData;
 import com.shui.payment.cmb.beans.directpayprotocol.CmbDirectPayReqData;
 import com.shui.payment.cmb.beans.querylistprotocol.CmbQueryListReqData;
 import com.shui.payment.cmb.beans.queryprotocol.CmbQueryReqData;
@@ -10,12 +11,16 @@ import com.shui.payment.cmb.constant.CmbConstant;
 import com.shui.payment.cmb.constant.ConstantUtil;
 import com.shui.payment.cmb.enums.BizTypeEnum;
 import com.shui.payment.cmb.http.HttpRequestUtil;
+import com.shui.payment.cmb.parameters.AccountPayQueryRequest;
 import com.shui.payment.cmb.parameters.DirectPayRequest;
 import com.shui.payment.cmb.parameters.PayQueryListRequest;
 import com.shui.payment.cmb.parameters.PayQueryRequest;
 import com.shui.payment.cmb.parser.CmbRequestUtil;
+import com.shui.payment.cmb.util.CmbUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,18 +47,21 @@ public class CmbPaymentServiceHandlerImpl extends AbstractCmbPaymentServiceHandl
     }
 
     @Override
-    public <T> T bankPay(DirectPayRequest request, Class<T> responseClass) throws Exception {
-        //其中任何一个为空，则都需要启用系统配置
-        if (StringUtils.isEmpty(request.getPayAccountNo())
-                || StringUtils.isEmpty(request.getPayAreaCode())) {
-            request.setPayAccountNo(cmbConfig.getPAY_ACCOUNT_NO())
-                    .setPayAreaCode(cmbConfig.getPAY_AREA_CODE());
+    public <T> T bankBatchPay(List<DirectPayRequest> listRequest, Class<T> responseClass) throws Exception {
+
+        List<Map> mapList = new ArrayList<>();
+        for (DirectPayRequest request : listRequest) {
+            //其中任何一个为空，则都需要启用系统配置
+            if (StringUtils.isEmpty(request.getPayAccountNo())
+                    || StringUtils.isEmpty(request.getPayAreaCode())) {
+                request.setPayAccountNo(cmbConfig.getPAY_ACCOUNT_NO())
+                        .setPayAreaCode(cmbConfig.getPAY_AREA_CODE());
+            }
+            mapList.add(getRequestMap(request, CmbDirectPayReqData.class));
         }
 
-
-        Map<String, String> map = getRequestMap(request, CmbDirectPayReqData.class);
-        String requestString = CmbRequestUtil.getDirectPayRequestStr(cmbConfig.getFUNC_DCPAYMNT(),
-                cmbConfig.getLOGIN_NAME(), BizTypeEnum.N02031.name(), map);
+        String requestString = CmbRequestUtil.getBatchDirectPayRequestStr(cmbConfig.getFUNC_DCPAYMNT(),
+                cmbConfig.getLOGIN_NAME(), BizTypeEnum.N02031.name(), mapList);
 
         String response = httpRequestUtil.post(requestString, cmbConfig.getCMB_URL(), ConstantUtil.GBK);
 
@@ -85,5 +93,20 @@ public class CmbPaymentServiceHandlerImpl extends AbstractCmbPaymentServiceHandl
         //TODO 4.4 处理查询流程
 
         return null;
+    }
+
+    @Override
+    public <T> T bankAccountTradeQuery(AccountPayQueryRequest request, Class<T> responseClass) throws Exception {
+        request.setPayAccountNo(cmbConfig.getPAY_ACCOUNT_NO());
+        //分行号和分行名称不能同时为空,默认只填写分行号信息
+        if (CmbUtil.isAllEmpty(request.getPayAreaCode(), request.getPayAreaName())) {
+            request.setPayAreaCode(cmbConfig.getPAY_AREA_CODE());
+        }
+
+        Map<String, String> map = getRequestMap(request, AccountPayQueryReqData.class);
+        String requestString = CmbRequestUtil.getQueryRequestStr(cmbConfig.getFUNC_GETTRANSINFO(),
+                cmbConfig.getLOGIN_NAME(), CmbConstant.DATA_TYPE_SDKTSINFX, map);
+        String response = httpRequestUtil.post(requestString, cmbConfig.getCMB_URL(), ConstantUtil.GBK);
+        return (T) CmbRequestUtil.processAccountPayQuery(response, CmbConstant.NTQTSINFZ);
     }
 }

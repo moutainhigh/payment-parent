@@ -35,6 +35,10 @@ public class CmbPropertiesConfig {
      */
     private String PAY_AREA_CODE;
     /**
+     * 2.3 查询账户交易信息func名称 GetTransInfo
+     */
+    private String FUNC_GETTRANSINFO;
+    /**
      * 3.6 直接支付func名称
      */
     private String FUNC_DCPAYMNT;
@@ -85,6 +89,7 @@ public class CmbPropertiesConfig {
         FUNC_DCPAYMNT = p.getProperty("FUNC_DCPAYMNT");
         FUNC_NTQRYSTN = p.getProperty("FUNC_NTQRYSTN");
         FUNC_NTQRYSTY = p.getProperty("FUNC_NTQRYSTY");
+        FUNC_GETTRANSINFO = p.getProperty("FUNC_GETTRANSINFO");
         CMB_URL = p.getProperty("CMB_URL");
     }
 
@@ -122,6 +127,10 @@ public class CmbPropertiesConfig {
 
     public String getPAY_AREA_CODE() {
         return PAY_AREA_CODE;
+    }
+
+    public String getFUNC_GETTRANSINFO() {
+        return FUNC_GETTRANSINFO;
     }
 
     public String getFUNC_DCPAYMNT() {

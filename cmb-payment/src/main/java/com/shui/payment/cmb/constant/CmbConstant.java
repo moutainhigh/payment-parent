@@ -15,12 +15,24 @@ public class CmbConstant {
     private CmbConstant() {
     }
 
-    //支付结果查询列表 数据类型标签
+    //2.3 查询账户交易信息 输入接口的母标签
+    public static final String DATA_TYPE_SDKTSINFX = "SDKTSINFX";
+    //3.3 支付结果查询列表 数据类型标签
     public static final String DATA_TYPE_BATCH_QUERY = "NTQRYSTNY1";
+    //3.6 直接支付 输入接口的母标签 业务请求参数 1
+    public static final String DATA_TYPE_SDKPAYRQX = "SDKPAYRQX";
+    //3.6 直接支付 输入接口的母标签 交易请求参数 2
+    public static final String DATA_TYPE_DCOPDPAYX = "DCOPDPAYX";
+
     //3.11 支付结果查询-按业务参考号 输入接口的母标签
     public static final String DATA_TYPE_QUERY = "NTQRYSTYX1";
 
+    //3.6 直接支付返回结果内容 xml标签名
+    public static final String NTQPAYRQZ = "NTQPAYRQZ";
+    //3.3，3.11 返回结果内容 xml标签名
     public static final String NTSTLLSTZ = "NTSTLLSTZ";
+    //2.3 返回结果内容 xml标签名
+    public static final String NTQTSINFZ = "NTQTSINFZ";
 
 
 }
