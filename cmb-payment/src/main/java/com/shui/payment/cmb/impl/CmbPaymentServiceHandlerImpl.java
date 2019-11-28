@@ -2,6 +2,7 @@ package com.shui.payment.cmb.impl;
 
 import com.shui.payment.cmb.AbstractCmbPaymentServiceHandler;
 import com.shui.payment.cmb.CmbBankPaymentService;
+import com.shui.payment.cmb.beans.accountprotocol.AccountDetailReqData;
 import com.shui.payment.cmb.beans.accounttradequeryprotocol.AccountPayQueryReqData;
 import com.shui.payment.cmb.beans.directpayprotocol.CmbDirectPayReqData;
 import com.shui.payment.cmb.beans.querylistprotocol.CmbQueryListReqData;
@@ -11,10 +12,7 @@ import com.shui.payment.cmb.constant.CmbConstant;
 import com.shui.payment.cmb.constant.ConstantUtil;
 import com.shui.payment.cmb.enums.BizTypeEnum;
 import com.shui.payment.cmb.http.HttpRequestUtil;
-import com.shui.payment.cmb.parameters.AccountPayQueryRequest;
-import com.shui.payment.cmb.parameters.DirectPayRequest;
-import com.shui.payment.cmb.parameters.PayQueryListRequest;
-import com.shui.payment.cmb.parameters.PayQueryRequest;
+import com.shui.payment.cmb.parameters.*;
 import com.shui.payment.cmb.parser.CmbRequestUtil;
 import com.shui.payment.cmb.util.CmbUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -108,5 +106,40 @@ public class CmbPaymentServiceHandlerImpl extends AbstractCmbPaymentServiceHandl
                 cmbConfig.getLOGIN_NAME(), CmbConstant.DATA_TYPE_SDKTSINFX, map);
         String response = httpRequestUtil.post(requestString, cmbConfig.getCMB_URL(), ConstantUtil.GBK);
         return (T) CmbRequestUtil.processAccountPayQuery(response, CmbConstant.NTQTSINFZ);
+    }
+
+    @Override
+    public <T> T bankAccountDetailQuery(List<AccountDetailRequest> listRequest, Class<T> responseClass) throws Exception {
+        //完善账户部分的配置 AccountDetailReqData
+        completeCmbAccountListRequest(listRequest);
+        List<Map> mapList = new ArrayList<>();
+        for (AccountDetailRequest request : listRequest) {
+            Map<String, String> map = getRequestMap(request, AccountDetailReqData.class);
+            mapList.add(map);
+        }
+        String requestString = CmbRequestUtil.getQueryRequestStr(cmbConfig.getFUNC_GETACCINFO(),
+                cmbConfig.getLOGIN_NAME(), CmbConstant.DATA_TYPE_SDKACINFX, mapList);
+        String response = httpRequestUtil.post(requestString, cmbConfig.getCMB_URL(), ConstantUtil.GBK);
+
+        return (T) CmbRequestUtil.processAccountDetailQuery(response, CmbConstant.NTQACINFZ);
+    }
+
+    private void completeCmbAccountListRequest(List<AccountDetailRequest> listRequest) {
+        //即list对象体，size允许为0
+        if (listRequest.isEmpty()) {
+            listRequest.add(new AccountDetailRequest());
+        }
+        for (AccountDetailRequest request : listRequest) {
+            initAccountConfig(request);
+        }
+    }
+
+    private void initAccountConfig(AccountDetailRequest request) {
+        request.setPayAccountNo(StringUtils.isEmpty(request.getPayAccountNo()) ?
+                cmbConfig.getPAY_ACCOUNT_NO() : request.getPayAccountNo());
+        //分行号和分行名称不能同时为空,否则填写默认配置的分行号信息
+        if (CmbUtil.isAllEmpty(request.getPayAreaCode(), request.getPayAreaName())) {
+            request.setPayAreaCode(cmbConfig.getPAY_AREA_CODE());
+        }
     }
 }

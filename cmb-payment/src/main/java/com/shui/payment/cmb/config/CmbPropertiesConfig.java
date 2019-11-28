@@ -34,6 +34,11 @@ public class CmbPropertiesConfig {
      * 系统默认付款账户所属分行地区代码，参见附录A1
      */
     private String PAY_AREA_CODE;
+
+    /**
+     * 2.2 查询账户详细信息 GetAccInfo
+     */
+    private String FUNC_GETACCINFO;
     /**
      * 2.3 查询账户交易信息func名称 GetTransInfo
      */
@@ -90,6 +95,7 @@ public class CmbPropertiesConfig {
         FUNC_NTQRYSTN = p.getProperty("FUNC_NTQRYSTN");
         FUNC_NTQRYSTY = p.getProperty("FUNC_NTQRYSTY");
         FUNC_GETTRANSINFO = p.getProperty("FUNC_GETTRANSINFO");
+        FUNC_GETACCINFO = p.getProperty("FUNC_GETACCINFO");
         CMB_URL = p.getProperty("CMB_URL");
     }
 
@@ -147,5 +153,9 @@ public class CmbPropertiesConfig {
 
     public String getCMB_URL() {
         return CMB_URL;
+    }
+
+    public String getFUNC_GETACCINFO() {
+        return FUNC_GETACCINFO;
     }
 }

@@ -1,6 +1,8 @@
 package com.shui.payment.cmb.parser;
 
 import com.alibaba.fastjson.JSON;
+import com.shui.payment.cmb.beans.accountprotocol.AccountDetailListResData;
+import com.shui.payment.cmb.beans.accountprotocol.AccountDetailResData;
 import com.shui.payment.cmb.beans.accounttradequeryprotocol.AccountPayQueryResData;
 import com.shui.payment.cmb.beans.accounttradequeryprotocol.AccountTradeResData;
 import com.shui.payment.cmb.beans.directpayprotocol.CmbDirectPayResData;
@@ -54,6 +56,14 @@ public class CmbRequestUtil {
     public static String getQueryRequestStr(String funcName, String loginName, String dataType, Map dataMap) {
         XmlPacket xmlPkt = new XmlPacket(funcName, loginName);
         xmlPkt.putProperty(dataType, dataMap);
+
+        return xmlPkt.toXmlString();
+    }
+    public static String getQueryRequestStr(String funcName, String loginName, String dataType, List<Map> dataMap) {
+        XmlPacket xmlPkt = new XmlPacket(funcName, loginName);
+        for (Map map : dataMap) {
+            xmlPkt.putProperty(dataType, map);
+        }
 
         return xmlPkt.toXmlString();
     }
@@ -335,5 +345,69 @@ public class CmbRequestUtil {
     }
     private static String getMapValue(Map map, String key) {
         return map.get(key) == null ? null : map.get(key).toString();
+    }
+
+    /**
+     * 2.2 查询账户详细信息
+     *
+     * @param response
+     * @param dataFlag
+     * @return
+     */
+    public static AccountDetailListResData processAccountDetailQuery(String response, String dataFlag) {
+        AccountDetailListResData resData = new AccountDetailListResData();
+        XmlPacket xmlPacket = XmlPacket.valueOf(response);
+
+        if (xmlPacket == null || (!"0".equals(xmlPacket.getRETCOD()))) {
+            return new AccountDetailListResData().setReturnCode("FAIL").setErrMsg(xmlPacket.getERRMSG());
+        }
+        resData.setReturnMsg(xmlPacket.getERRMSG())
+                .setReturnCode(getReturnCode(xmlPacket.getRETCOD()));
+        if (!("SUCCESS".equals(resData.getReturnCode()))) {
+            resData.setErrCode(getErrorCode(xmlPacket.getRETCOD()))
+                    .setErrMsg(xmlPacket.getERRMSG());
+            log.info("2.2 查询账户详细信息，processAccountDetailQuery, 结果解析失败：{}", JSON.toJSONString(resData));
+            return resData;
+        }
+
+        List<AccountDetailResData> accountDetailList = new ArrayList<>();
+
+        for (int i = 0; i < xmlPacket.getSectionSize(dataFlag); i++) {
+            Map propMap = xmlPacket.getProperty(dataFlag, i);
+            if ("0".equals(xmlPacket.getRETCOD())) {
+                AccountDetailResData detail = getAccountDetailResData(propMap);
+                accountDetailList.add(detail);
+            }
+        }
+
+        resData.setAccountDetailResDataList(accountDetailList);
+        return resData;
+    }
+
+    private static AccountDetailResData getAccountDetailResData(Map propMap) {
+        AccountDetailResData data = new AccountDetailResData();
+        if (propMap == null) {
+            return data;
+        }
+        data.setCurrency(getMapValue(propMap, CmbParamsName.CCYNBR))
+                .setCurrencyName(getMapValue(propMap, CmbParamsName.C_CCYNBR))
+                .setCourse(getMapValue(propMap, CmbParamsName.ACCITM))
+                .setPayAreaCode(getMapValue(propMap, CmbParamsName.BBKNBR))
+                .setPayAccountNo(getMapValue(propMap, CmbParamsName.ACCNBR))
+                .setComment(getMapValue(propMap, CmbParamsName.ACCNAM))
+                .setCashAccountBalance(getMapValue(propMap, CmbParamsName.ACCBLV))
+                .setOnlineBalance(getMapValue(propMap, CmbParamsName.ONLBLV))
+                .setFreezeBalance(getMapValue(propMap, CmbParamsName.HLDBLV))
+                .setAvailableBalance(getMapValue(propMap, CmbParamsName.AVLBLV))
+                .setOverdraftAmtLimit(getMapValue(propMap, CmbParamsName.LMTOVR))
+                .setAccountStatus(getMapValue(propMap, CmbParamsName.STSCOD))
+                .setInterestCode(getMapValue(propMap, CmbParamsName.INTCOD))
+                .setInterestRate(getMapValue(propMap, CmbParamsName.C_INTRAT))
+                .setOpenAccountDate(getMapValue(propMap, CmbParamsName.OPNDAT))
+                .setMaturityDate(getMapValue(propMap, CmbParamsName.MUTDAT))
+                .setInterestType(getMapValue(propMap, CmbParamsName.INTTYP))
+                .setDepositTerm(getMapValue(propMap, CmbParamsName.DPSTXT));
+
+        return data;
     }
 }

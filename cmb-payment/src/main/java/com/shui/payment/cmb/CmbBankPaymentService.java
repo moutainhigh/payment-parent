@@ -1,9 +1,6 @@
 package com.shui.payment.cmb;
 
-import com.shui.payment.cmb.parameters.AccountPayQueryRequest;
-import com.shui.payment.cmb.parameters.DirectPayRequest;
-import com.shui.payment.cmb.parameters.PayQueryListRequest;
-import com.shui.payment.cmb.parameters.PayQueryRequest;
+import com.shui.payment.cmb.parameters.*;
 
 import java.util.List;
 
@@ -51,6 +48,7 @@ public interface CmbBankPaymentService {
 
     /**
      * 2.3 查询账户交易信息
+     *
      * @param request
      * @param responseClass
      * @param <T>
@@ -58,4 +56,16 @@ public interface CmbBankPaymentService {
      * @throws Exception
      */
     <T> T bankAccountTradeQuery(AccountPayQueryRequest request, Class<T> responseClass) throws Exception;
+
+    /**
+     * 2.2 查询账户详细信息
+     * 支持多账户查询。
+     *
+     * @param listRequest
+     * @param responseClass
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
+    public <T> T bankAccountDetailQuery(List<AccountDetailRequest> listRequest, Class<T> responseClass) throws Exception;
 }

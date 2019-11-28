@@ -1,11 +1,13 @@
 package com.shui.payment.cmb;
 
 import com.alibaba.fastjson.JSON;
+import com.shui.payment.cmb.beans.accountprotocol.AccountDetailListResData;
 import com.shui.payment.cmb.beans.accounttradequeryprotocol.AccountPayQueryResData;
 import com.shui.payment.cmb.beans.directpayprotocol.CmbBatchDirectPayResData;
 import com.shui.payment.cmb.beans.directpayprotocol.CmbDirectPayResData;
 import com.shui.payment.cmb.beans.querylistprotocol.CmbQueryListResData;
 import com.shui.payment.cmb.enums.BizTypeEnum;
+import com.shui.payment.cmb.parameters.AccountDetailRequest;
 import com.shui.payment.cmb.parameters.AccountPayQueryRequest;
 import com.shui.payment.cmb.parameters.DirectPayRequest;
 import com.shui.payment.cmb.parameters.PayQueryListRequest;
@@ -32,7 +34,22 @@ public class CmbPaymentServiceHandlerTest extends AppJunitGeneralBaseConfig {
     public void testReady() {
         initCmbConfig();
     }
+    @Test
+    public void bankAccountDetailQuery() throws Exception {
 
+        List<AccountDetailRequest> request = new ArrayList<>();
+
+        AccountDetailRequest ar = new AccountDetailRequest();
+//        ar.setPayAccountNo("6214850119760798").setPayAreaCode("10");
+//        ar.setPayAccountNo("755915681010811").setPayAreaCode("75");
+
+        request.add(ar);
+
+        AccountDetailListResData response = cmbPaymentServiceHandler.bankAccountDetailQuery(request, AccountDetailListResData.class);
+
+        System.out.println("返回结果：" + JSON.toJSONString(response));
+        Assert.assertEquals("SUCCESS", response.getReturnCode());
+    }
 
     @Test
     public void bankAccountTradeQuery() throws Exception {

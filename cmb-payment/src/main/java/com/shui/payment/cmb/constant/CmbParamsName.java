@@ -11,7 +11,6 @@ package com.shui.payment.cmb.constant;
  * @Created on 2019/10/1711:53 AM
  */
 public class CmbParamsName {
-
     /**
      * 流程实例号
      */
@@ -245,6 +244,76 @@ public class CmbParamsName {
      * NAREXT
      */
     public static final String NAREXT = "NAREXT";
+
+    /**
+     * 币种名称
+     */
+    public static final String C_CCYNBR = "C_CCYNBR";
+    /**
+     * 科目
+     */
+    public static final String ACCITM = "ACCITM";
+    /**
+     * 分行号
+     */
+    public static final String BBKNBR = "BBKNBR";
+    /**
+     * 账号
+     */
+    public static final String ACCNBR = "ACCNBR";
+    /**
+     * 注解
+     */
+    public static final String ACCNAM = "ACCNAM";
+    /**
+     * 上日余额
+     * ACCBLV
+     */
+    public static final String ACCBLV = "ACCBLV";
+    /**
+     * 联机余额
+     */
+    public static final String ONLBLV = "ONLBLV";
+    /**
+     * 冻结余额
+     */
+    public static final String HLDBLV = "HLDBLV";
+    /**
+     * 可用余额
+     */
+    public static final String AVLBLV = "AVLBLV";
+    /**
+     * 透支额度
+     */
+    public static final String LMTOVR = "LMTOVR";
+    /**
+     * 账户状态
+     */
+    public static final String STSCOD = "STSCOD";
+    /**
+     * 利息码
+     */
+    public static final String INTCOD = "INTCOD";
+    /**
+     * 利息码
+     */
+    public static final String C_INTRAT = "C_INTRAT";
+    /**
+     * 开户日
+     */
+    public static final String OPNDAT = "OPNDAT";
+    /**
+     * 到期日
+     */
+    public static final String MUTDAT = "MUTDAT";
+    /**
+     * 利率类型 A.35 利率类型码
+     */
+    public static final String INTTYP = "INTTYP";
+    /**
+     * 存期
+     */
+    public static final String DPSTXT = "DPSTXT";
 
 
     public static final String NTQPAYRQZ = "NTQPAYRQZ";

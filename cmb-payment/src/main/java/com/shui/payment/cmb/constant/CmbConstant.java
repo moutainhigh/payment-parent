@@ -14,7 +14,8 @@ public class CmbConstant {
 
     private CmbConstant() {
     }
-
+    //2.2 查询账户详细信息
+    public static final String DATA_TYPE_SDKACINFX = "SDKACINFX";
     //2.3 查询账户交易信息 输入接口的母标签
     public static final String DATA_TYPE_SDKTSINFX = "SDKTSINFX";
     //3.3 支付结果查询列表 数据类型标签
@@ -33,6 +34,8 @@ public class CmbConstant {
     public static final String NTSTLLSTZ = "NTSTLLSTZ";
     //2.3 返回结果内容 xml标签名
     public static final String NTQTSINFZ = "NTQTSINFZ";
+    //2.2 返回结果内容 xml标签名
+    public static final String NTQACINFZ = "NTQACINFZ";
 
 
 }
