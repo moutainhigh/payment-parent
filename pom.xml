@@ -38,6 +38,7 @@
 		<module>DimensionalCode</module>
 		<module>wechat-public</module>
         <module>cmb-payment</module>
+        <module>webank</module>
     </modules>
 
 	<dependencyManagement>

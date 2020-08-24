@@ -11,7 +11,7 @@
 
     <groupId>cn.aposoft.ecommerce</groupId>
     <artifactId>wechat-public</artifactId>
-
+    <name>wechat-public(微信支付对接，新版)</name>
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
