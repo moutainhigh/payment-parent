@@ -28,7 +28,7 @@
 		<com.google.zxing.version>3.2.1</com.google.zxing.version>
 
 		<!-- json 工具版本 -->
-		<com.alibaba.fastjson.version>1.2.7</com.alibaba.fastjson.version>
+		<com.alibaba.fastjson.version>1.2.73</com.alibaba.fastjson.version>
 	</properties>
 	<modules>
 		<module>wechat-payment</module>
@@ -38,11 +38,12 @@
 		<module>DimensionalCode</module>
 		<module>wechat-public</module>
         <module>cmb-payment</module>
-        <module>webank</module>
-    </modules>
+		<module>webank</module>
+	</modules>
 
 	<dependencyManagement>
 		<dependencies>
+
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-pool2</artifactId>
@@ -86,51 +87,6 @@
 				<artifactId>spring-data-redis</artifactId>
 				<version>1.6.4.RELEASE</version>
 			</dependency>
-			<dependency>
-				<groupId>${spring.group}</groupId>
-				<artifactId>spring-jdbc</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${spring.group}</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${spring.group}</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${spring.group}</groupId>
-				<artifactId>spring-webmvc</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${spring.group}</groupId>
-				<artifactId>spring-tx</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${spring.group}</groupId>
-				<artifactId>spring-context-support</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${spring.group}</groupId>
-				<artifactId>spring-oxm</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${spring.group}</groupId>
-				<artifactId>spring-aop</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${spring.group}</groupId>
-				<artifactId>spring-test</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
 
 			<!-- JavaEE Servlet Dependencies -->
 			<dependency>
@@ -167,11 +123,6 @@
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-all</artifactId>
 				<version>${org.mockito.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.easymock</groupId>
-				<artifactId>com.springsource.org.easymock</artifactId>
-				<version>2.5.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
@@ -270,8 +221,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>7</source>
-					<target>7</target>
+					<source>8</source>
+					<target>8</target>
 				</configuration>
 			</plugin>
 		</plugins>
