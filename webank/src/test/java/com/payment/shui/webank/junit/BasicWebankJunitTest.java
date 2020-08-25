@@ -1,5 +1,6 @@
 package com.payment.shui.webank.junit;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -12,4 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
  */
 @SpringBootTest
 public class BasicWebankJunitTest {
+
+    @BeforeEach
+    public void setUp(){
+        System.out.println("使用Junit5进行测试");
+    }
 }
