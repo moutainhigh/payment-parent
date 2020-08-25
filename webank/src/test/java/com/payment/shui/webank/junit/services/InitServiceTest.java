@@ -4,9 +4,7 @@ import com.payment.shui.webank.junit.BasicWebankJunitTest;
 import com.payment.shui.webank.services.InitService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * @author code
@@ -16,7 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @Company: zyxf
  * @Created on 2020/8/25 14:40
  */
-@ExtendWith(SpringExtension.class)
+
 public class InitServiceTest extends BasicWebankJunitTest {
 
     @Autowired
