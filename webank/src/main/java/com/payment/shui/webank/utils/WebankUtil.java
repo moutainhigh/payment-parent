@@ -31,13 +31,18 @@ public class WebankUtil {
         if (values == null) {
             throw new NullPointerException("values is null");
         }
-        values.removeAll(Collections.singleton(null));// remove null
+        // remove null
+        values.removeAll(Collections.singleton(null));
         values.add(signTicket);
         java.util.Collections.sort(values);
         StringBuilder sb = new StringBuilder();
         for (String s : values) {
             sb.append(s);
         }
-        return Hashing.sha1().hashString(sb, Charsets.UTF_8).toString().toUpperCase();
+        return sha256(sb).toUpperCase();
+    }
+
+    public static String sha256(StringBuilder builder) {
+        return Hashing.sha1().hashString(builder, Charsets.UTF_8).toString();
     }
 }

@@ -3,7 +3,7 @@ package com.payment.shui.webank.beans;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/**合作方调用微众bean
  * @author code
  * @Title: InitBean
  * @Copyright: Copyright (c) 2020
