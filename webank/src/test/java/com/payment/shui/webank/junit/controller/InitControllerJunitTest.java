@@ -2,7 +2,10 @@ package com.payment.shui.webank.junit.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.payment.shui.webank.WebankApplication;
-import org.assertj.core.api.Assertions;
+import com.payment.shui.webank.beans.ResPonseInfo;
+import com.payment.shui.webank.channel.constant.ConstantUtil;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author code
@@ -30,13 +38,44 @@ public class InitControllerJunitTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private String url = "http://127.0.0.1:";
+
+    @BeforeEach
+    public void setUp() {
+        url += port;
+    }
+
     @Test
     public void index() {
 
-        String response = this.restTemplate.getForObject("http://127.0.0.1:" + port + "/index", String.class);
+        String response = this.restTemplate.getForObject(url + "/index", String.class);
         System.out.println("返回结果：" + JSON.toJSONString(response));
-        Assertions.assertThat(response).contains("webank project success");
+        Assertions.assertEquals("webank project success",response);
+
+    }
+
+    @Test
+    public void webank() throws UnsupportedEncodingException {
+        Map<String, String> mapVariables = getMap();
+        String jsonRequest = JSON.toJSONString(mapVariables);
+        Map<String, Object> response = this.restTemplate.postForObject(url + "/webank", jsonRequest, Map.class);
+        System.out.println("返回结果：" + JSON.toJSONString(response));
+        Assertions.assertNotNull(response);
+//        Assertions.assertEquals("0010",response.getCODE());
+    }
+
+    private Map<String, String> getMap() throws UnsupportedEncodingException {
+        Map<String, String> map = new HashMap<>();
+
+        map.put("transName", "TLMerchantQuery");
+        map.put("Plain", URLEncoder.encode("{\n" +
+                "\"merchantno\":\"00000006\",\"product_cd\":\"230001\",\"req_nbr\":\"tbt001\"}", ConstantUtil.UTF8));
+        map.put("Signature", "1cb54c406c06033967b4790bc31c6e60");
+        map.put("Timestamp", "1519700632680");
+        map.put("SeqNo", "1519700632680112122");
+        String salt = "random";
 
 
+        return map;
     }
 }

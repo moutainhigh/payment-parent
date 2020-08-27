@@ -16,8 +16,8 @@ import java.util.List;
  * @Company: zyxf
  * @Created on 2020/8/25 14:24
  */
-public class WebankUtil {
-    private WebankUtil() {
+public class WebankSignUtil {
+    private WebankSignUtil() {
     }
 
     /**
@@ -34,7 +34,7 @@ public class WebankUtil {
         // remove null
         values.removeAll(Collections.singleton(null));
         values.add(signTicket);
-        java.util.Collections.sort(values);
+        Collections.sort(values);
         StringBuilder sb = new StringBuilder();
         for (String s : values) {
             sb.append(s);

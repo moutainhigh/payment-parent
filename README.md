@@ -13,6 +13,7 @@
 | wechat-payment|微信普通商户版扫码支付 |
 | wechat-public| 微信服务商版支付 |
 |cmb-payment|招商银行，银企直联模块|
+|webank| 微众银行模块  |
 
 
 子项:微信支付项目 V1.0

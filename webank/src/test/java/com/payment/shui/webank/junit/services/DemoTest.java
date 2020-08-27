@@ -1,7 +1,7 @@
 package com.payment.shui.webank.junit.services;
 
 import com.payment.shui.webank.beans.InitBean;
-import com.payment.shui.webank.utils.WebankUtil;
+import com.payment.shui.webank.utils.WebankSignUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ public class DemoTest {
         List list = bean.getList();
         list.add(httpBody);
 
-        String sign = WebankUtil.sign(list, bean.getTicket());
+        String sign = WebankSignUtil.sign(list, bean.getTicket());
         System.out.println(sign);
         Assertions.assertEquals("07DC5F50333B99D1D99C80AEE3863701C107C6B7", sign);
     }

@@ -1,5 +1,6 @@
 package com.payment.shui.webank.httpclient;
 
+import com.alibaba.fastjson.JSON;
 import com.payment.shui.webank.channel.constant.ConstantUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,9 +18,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +45,7 @@ public class HttpRequestClient {
 
     public static final String APPLICATION_JSON_VALUE = "application/json";
     public static final String TEXT_XML_VALUE = "text/xml";
+
     /**
      * 通知分发：下游通道使用
      *
@@ -138,5 +141,54 @@ public class HttpRequestClient {
                 .setMaxConnTotal(20).build();
     }
 
+    /**
+     * 读取请求中的body信息
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public static String readRequestBody(HttpServletRequest request) throws Exception {
+        InputStream is = request.getInputStream();
+        StringBuilder buf = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        String line;
+        while ((line = br.readLine()) != null) {
+            buf.append(line);
+            buf.append('\n');
+        }
+        if (buf.length() > 0) {
+            buf.deleteCharAt(buf.length() - 1);
+        }
+        return buf.toString();
+    }
 
+    /**
+     * 读取请求参数并转换为json对象
+     *
+     * @param request
+     * @return
+     */
+    public static String readParametersToJson(HttpServletRequest request) {
+
+        Map<String, Object> paramsMap = readParametersToMap(request);
+
+        return JSON.toJSONString(paramsMap);
+    }
+
+    /**
+     * 读取请求参数并转换为map对象
+     * @param request
+     * @return
+     */
+    public static Map<String, Object> readParametersToMap(HttpServletRequest request){
+        Map<String, String[]> map = request.getParameterMap();
+
+        Map<String, Object> paramsMap = new HashMap<>(map.size());
+        for (Map.Entry<String, String[]> entry : map.entrySet()) {
+            Object valueStr = (entry.getValue() == null) ? null : entry.getValue()[0];
+            paramsMap.put(entry.getKey(), valueStr);
+        }
+        return paramsMap;
+    }
 }
