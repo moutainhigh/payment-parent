@@ -6,8 +6,8 @@ import com.payment.shui.webank.beans.protocol.TokenResData;
 import com.payment.shui.webank.beans.protocol.WebankResData;
 import com.payment.shui.webank.channel.ChannelService;
 import com.payment.shui.webank.channel.constant.WebankConfig;
+import com.payment.shui.webank.httpclient.HttpConfig;
 import com.payment.shui.webank.httpclient.HttpClientConfig;
-import com.payment.shui.webank.httpclient.HttpClientConfigImpl;
 import com.payment.shui.webank.httpclient.HttpRequestUtil;
 import com.payment.shui.webank.httpclient.HttpRequestUtilImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +45,8 @@ public class ChannelServiceimpl implements ChannelService {
     public WebankResData getAccessToken(TokenReqData reqData) {
         String tokenUrl = getTokenUrl(reqData);
 
-        HttpClientConfig httpClientConfig = new HttpClientConfigImpl();
-        HttpRequestUtil httpRequestUtil = HttpRequestUtilImpl.getInstance(httpClientConfig);
+        HttpConfig httpConfig = new HttpClientConfig();
+        HttpRequestUtil httpRequestUtil = HttpRequestUtilImpl.getInstance(httpConfig);
 
         try {
             String response = httpRequestUtil.get(tokenUrl);

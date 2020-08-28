@@ -5,12 +5,10 @@ import com.payment.shui.webank.channel.constant.ConstantUtil;
 import com.payment.shui.webank.channel.constant.WebankConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.ParseException;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -22,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * 对接httpclient请求操作
+ *
  * @author code
  * @Title: HttpRequestUtilImpl
  * @Copyright: Copyright (c) 2017
@@ -108,7 +108,7 @@ public class HttpRequestUtilImpl implements HttpRequestUtil {
      * @return
      */
     private String generalGet(String url, Map<String, String> requestMap, CloseableHttpClient httpsClient, String encode) throws IOException {
-        HttpGet httpGet = HttpRequestClient.createHttpGet(url, "", requestMap);
+        HttpGet httpGet = HttpRequestClient.createHttpGet(url, null, requestMap);
 
         String request = requestMap == null ? null : JSON.toJSONString(requestMap);
         return executeHttp(request, url, httpsClient, httpGet, encode);
@@ -124,11 +124,11 @@ public class HttpRequestUtilImpl implements HttpRequestUtil {
     /**
      * 获取该类的实例
      */
-    public static final HttpRequestUtilImpl getInstance(HttpClientConfig httpClientConfig) {
+    public static final HttpRequestUtilImpl getInstance(HttpConfig httpConfig) {
 
-        return new HttpRequestUtilImpl(httpClientConfig.getConnectionPerRoute(),
-                httpClientConfig.getHttpConnectTimeoutMs(),
-                httpClientConfig.getHttpReadTimeoutMs());
+        return new HttpRequestUtilImpl(httpConfig.getConnectionPerRoute(),
+                httpConfig.getHttpConnectTimeoutMs(),
+                httpConfig.getHttpReadTimeoutMs());
     }
 
     /**

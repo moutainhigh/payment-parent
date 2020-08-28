@@ -22,10 +22,7 @@ import org.apache.http.util.EntityUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用于发送HTTP请求
@@ -117,23 +114,19 @@ public class HttpRequestClient {
      * @return
      */
     public static HttpGet createHttpGet(String url, String pathUrl, Map<String, String> requestMap) {
-
         List<NameValuePair> nameValuePairs = new ArrayList<>();
         if (requestMap != null) {
-            //url参数拼装
-            for (int i = 0; i < requestMap.size(); i++) {
-                String name = requestMap.get(i);
-                String value = requestMap.get(name);
-                nameValuePairs.add(new BasicNameValuePair(name, value));
+            for (Map.Entry<String, String> entry:requestMap.entrySet()){
+                nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
             }
         }
         String parametersFormat = URLEncodedUtils.format(nameValuePairs, Charsets.UTF_8);
         //完整请求url拼接
-        String  requestUrl = url
+        String requestUrl = url
                 + (StringUtils.isEmpty(pathUrl) ? "" : pathUrl)
-                + (StringUtils.isEmpty(parametersFormat)?"":"?"+parametersFormat);
+                + (StringUtils.isEmpty(parametersFormat) ? "" : "?" + parametersFormat);
 
-
+        log.info("http get url = " + requestUrl);
         HttpGet httpGet = new HttpGet(requestUrl);
         RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60 * 1000).setConnectTimeout(60 * 1000).build();
         httpGet.setConfig(requestConfig);

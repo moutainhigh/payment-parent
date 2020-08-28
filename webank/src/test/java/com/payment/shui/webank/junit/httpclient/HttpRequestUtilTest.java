@@ -1,7 +1,6 @@
 package com.payment.shui.webank.junit.httpclient;
 
 import com.alibaba.fastjson.JSON;
-import com.payment.shui.webank.channel.constant.ConstantUtil;
 import com.payment.shui.webank.httpclient.*;
 import com.payment.shui.webank.utils.RandomUtil;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -28,13 +27,23 @@ public class HttpRequestUtilTest {
 
     @BeforeEach
     public void setUp() {
-        HttpClientConfig httpClientConfig = new HttpClientConfigImpl();
-        httpRequestUtil = HttpRequestUtilImpl.getInstance(httpClientConfig);
+        HttpConfig httpConfig = new HttpClientConfig();
+        httpRequestUtil = HttpRequestUtilImpl.getInstance(httpConfig);
     }
 
     @Test
     public void httpTest() throws IOException {
         String response = httpRequestUtil.get("http://www.baidu.com/");
+        System.out.println("返回结果："+response);
+    }
+
+    @Test
+    public void httpGetWithParam() throws IOException {
+        Map<String, String> map = new HashMap<>();
+        map.put("key","");
+        map.put("name","张三");
+        map.put("sex","boy");
+        String response = httpRequestUtil.get("http://www.ba.com/", map);
         System.out.println("返回结果："+response);
     }
 

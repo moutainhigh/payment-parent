@@ -6,7 +6,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import java.io.IOException;
 import java.util.Map;
 
-/**
+/** 对接httpclient请求操作
  * @author code
  * @Title: HttpRequestUtil
  * @Copyright: Copyright (c) 2017
