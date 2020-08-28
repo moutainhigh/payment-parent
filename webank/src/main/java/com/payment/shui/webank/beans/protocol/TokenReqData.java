@@ -30,31 +30,35 @@ public class TokenReqData {
         return app_id;
     }
 
-    public void setApp_id(String app_id) {
+    public TokenReqData setApp_id(String app_id) {
         this.app_id = app_id;
+        return this;
     }
 
     public String getSecret() {
         return secret;
     }
 
-    public void setSecret(String secret) {
+    public TokenReqData setSecret(String secret) {
         this.secret = secret;
+        return this;
     }
 
     public String getGrant_type() {
         return grant_type;
     }
 
-    public void setGrant_type(String grant_type) {
+    public TokenReqData setGrant_type(String grant_type) {
         this.grant_type = grant_type;
+        return this;
     }
 
     public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public TokenReqData setVersion(String version) {
         this.version = version;
+        return this;
     }
 }

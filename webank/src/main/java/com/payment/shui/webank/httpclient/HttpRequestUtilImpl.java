@@ -65,7 +65,12 @@ public class HttpRequestUtilImpl implements HttpRequestUtil {
 
     @Override
     public String get(String url) throws IOException {
-        return generalGet(url, client, ConstantUtil.UTF8);
+        return generalGet(url, null, client, ConstantUtil.UTF8);
+    }
+
+    @Override
+    public String get(String url, Map<String, String> requestMap) throws IOException {
+        return generalGet(url, requestMap, client, ConstantUtil.UTF8);
     }
 
     @Override
@@ -80,7 +85,7 @@ public class HttpRequestUtilImpl implements HttpRequestUtil {
     }
 
     @Override
-    public CloseableHttpResponse httpPost(String request, String url,String contentType) throws IOException {
+    public CloseableHttpResponse httpPost(String request, String url, String contentType) throws IOException {
         HttpPost httpPost = HttpRequestClient.createHttpPost(request, url, contentType, ConstantUtil.UTF8, httpConnectTimeoutMs, httpReadTimeoutMs);
 
         return executeResponse(client, httpPost, ConstantUtil.UTF8);
@@ -102,9 +107,11 @@ public class HttpRequestUtilImpl implements HttpRequestUtil {
      * @param encode
      * @return
      */
-    private String generalGet(String url, CloseableHttpClient httpsClient, String encode) throws IOException {
-        HttpGet httpGet = HttpRequestClient.createHttpGet(url);
-        return executeHttp(null, url, httpsClient, httpGet, encode);
+    private String generalGet(String url, Map<String, String> requestMap, CloseableHttpClient httpsClient, String encode) throws IOException {
+        HttpGet httpGet = HttpRequestClient.createHttpGet(url, "", requestMap);
+
+        String request = requestMap == null ? null : JSON.toJSONString(requestMap);
+        return executeHttp(request, url, httpsClient, httpGet, encode);
     }
 
     private CloseableHttpClient createHttpClient() {
@@ -176,7 +183,7 @@ public class HttpRequestUtilImpl implements HttpRequestUtil {
             log.info(threadName + " - Response:{url:" + url + ", body: " + result + "}");
         } catch (ParseException | IOException e) {
             log.error(
-                    "Exception:{ message:  请求远程服务时发生 " + e.getCause().toString() + "! " + e.getMessage() + "}",
+                    "Exception:{ message:  请求远程服务时发生 " + e.getCause() + "! " + e.getMessage() + "}",
                     e);
             throw e;
         }

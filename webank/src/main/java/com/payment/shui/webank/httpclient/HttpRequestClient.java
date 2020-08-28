@@ -3,6 +3,7 @@ package com.payment.shui.webank.httpclient;
 import com.alibaba.fastjson.JSON;
 import com.payment.shui.webank.channel.constant.ConstantUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.NameValuePair;
@@ -12,6 +13,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -105,6 +107,39 @@ public class HttpRequestClient {
     }
 
 
+    /**
+     * 包含参数的get请求。
+     * url拼接示例：http://www.demo.com//path/demo?key=abc
+     *
+     * @param url        公共url部分/主域名地址。http://www.demo.com
+     * @param pathUrl    接口路径。/path/demo
+     * @param requestMap 请求参数，用于进行url拼接使用
+     * @return
+     */
+    public static HttpGet createHttpGet(String url, String pathUrl, Map<String, String> requestMap) {
+
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+        if (requestMap != null) {
+            //url参数拼装
+            for (int i = 0; i < requestMap.size(); i++) {
+                String name = requestMap.get(i);
+                String value = requestMap.get(name);
+                nameValuePairs.add(new BasicNameValuePair(name, value));
+            }
+        }
+        String parametersFormat = URLEncodedUtils.format(nameValuePairs, Charsets.UTF_8);
+        //完整请求url拼接
+        String  requestUrl = url
+                + (StringUtils.isEmpty(pathUrl) ? "" : pathUrl)
+                + (StringUtils.isEmpty(parametersFormat)?"":"?"+parametersFormat);
+
+
+        HttpGet httpGet = new HttpGet(requestUrl);
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60 * 1000).setConnectTimeout(60 * 1000).build();
+        httpGet.setConfig(requestConfig);
+        return httpGet;
+    }
+
     public static HttpGet createHttpGet(String url) {
         HttpGet httpGet = new HttpGet(url);
         RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60 * 1000).setConnectTimeout(60 * 1000).build();
@@ -178,10 +213,11 @@ public class HttpRequestClient {
 
     /**
      * 读取请求参数并转换为map对象
+     *
      * @param request
      * @return
      */
-    public static Map<String, Object> readParametersToMap(HttpServletRequest request){
+    public static Map<String, Object> readParametersToMap(HttpServletRequest request) {
         Map<String, String[]> map = request.getParameterMap();
 
         Map<String, Object> paramsMap = new HashMap<>(map.size());

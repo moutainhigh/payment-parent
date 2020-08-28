@@ -1,5 +1,8 @@
 package com.payment.shui.webank.channel;
 
+import com.payment.shui.webank.beans.protocol.TokenReqData;
+import com.payment.shui.webank.beans.protocol.TokenResData;
+import com.payment.shui.webank.beans.protocol.WebankResData;
 import com.payment.shui.webank.channel.constant.WebankConfig;
 
 /**
@@ -13,4 +16,11 @@ import com.payment.shui.webank.channel.constant.WebankConfig;
 public interface ChannelService {
 
     public WebankConfig getWebankConfig();
+
+    /**
+     * 获取token
+     * @param reqData
+     * @return
+     */
+    public WebankResData getAccessToken(TokenReqData reqData);
 }

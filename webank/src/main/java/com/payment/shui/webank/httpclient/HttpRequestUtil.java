@@ -39,6 +39,7 @@ public interface HttpRequestUtil extends AutoCloseable {
     String keyCertXmlPost(String request, WebankConfig config, String url) throws Exception;
 
     String get(String url) throws IOException;
+    String get(String url,Map<String,String> requestMap) throws IOException;
 
     String mapPost(Map<String, String> mapRequest, String url) throws IOException;
     CloseableHttpResponse httpGet(String url) throws IOException;
