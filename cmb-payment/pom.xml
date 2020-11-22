@@ -11,7 +11,7 @@
 
     <groupId>cn.aposoft.ecommerce</groupId>
     <artifactId>cmb-payment</artifactId>
-
+    <name>cmb-payment(招行接口)</name>
 
     <dependencies>
         <dependency>

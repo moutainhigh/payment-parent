@@ -38,10 +38,12 @@
 		<dependency>
 			<groupId>${spring.group}</groupId>
 			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${spring.group}</groupId>
 			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -61,6 +63,7 @@
 		<dependency>
 			<groupId>${spring.group}</groupId>
 			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

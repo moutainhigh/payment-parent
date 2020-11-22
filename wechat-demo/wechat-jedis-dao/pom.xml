@@ -12,6 +12,7 @@
 	<name>wechat-jedis-dao</name>
 	<url>http://maven.apache.org</url>
 	<properties>
+		<spring.version>4.2.5.RELEASE</spring.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
@@ -26,11 +27,13 @@
 		<dependency>
 			<groupId>${spring.group}</groupId>
 			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>${spring.group}</groupId>
 			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
