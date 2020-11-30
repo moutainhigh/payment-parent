@@ -6,14 +6,13 @@
 |模块名称|说明|
 |---|---|
 |alipay-payment | 旧版支付宝扫码支付|
-|alipay-payment2 | 未完成|
-|csh-payment |未完成 |
 | DimensionalCode| 二维码创建与解析模块|
 |wechat-demo | 微信扫码支付测试demo|
 | wechat-payment|微信普通商户版扫码支付 |
-| wechat-public| 微信服务商版支付 |
+| wechat-public| 微信服务商版支付，包含内容更为广阔 |
 |cmb-payment|招商银行，银企直联模块|
 |webank| 微众银行模块-接口加解密，通路部分封装完成，参数部分未完成 。采用Junit5进行测试。 |
+|alipay-public|新版支付宝支付接口对接|
 
 
 子项:微信支付项目 V1.0

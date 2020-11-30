@@ -34,7 +34,6 @@
 		<module>wechat-payment</module>
 		<module>wechat-demo</module>
 		<module>alipay-payment</module>
-		<module>alipay-payment2</module>
 		<module>DimensionalCode</module>
 		<module>wechat-public</module>
         <module>cmb-payment</module>
