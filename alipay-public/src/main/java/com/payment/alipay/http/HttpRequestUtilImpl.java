@@ -83,9 +83,8 @@ public class HttpRequestUtilImpl implements HttpRequestUtil {
     }
 
 
-
     @Override
-    public String get(String url,String encoding) throws IOException {
+    public String get(String url, String encoding) throws IOException {
         return generalGet(url, client, encoding);
     }
 
@@ -138,27 +137,6 @@ public class HttpRequestUtilImpl implements HttpRequestUtil {
         return new HttpRequestUtilImpl(connectionPerRoute, httpConnectTimeoutMs, httpReadTimeoutMs);
     }
 
-//    /**
-//     * 返回配置微信商户的p12文件的加密连接客户端
-//     *
-//     * @return
-//     */
-//    private CloseableHttpClient getHttpsClient(BaseWechatConfig config) {
-//
-//        CloseableHttpClient httpsClient = httpsClients.get(config.getMchID());
-//        if (httpsClient == null) {
-//            try {
-//                //putIfAbsent方法保证返回值为同一个，该方法本身赋值后便会有对应的返回值返回
-//                httpsClient = httpsClients.putIfAbsent(config.getMchID(), getPkcs12Client(config.getMchID(), config.getCertStream()));
-//                if (httpsClient == null) {
-//                    httpsClient = httpsClients.get(config.getMchID());
-//                }
-//            } catch (Exception e) {
-//                log.error("当执行微信交易过程中,尝试创建客户端失败,请检查.", e);
-//            }
-//        }
-//        return httpsClient;
-//    }
 
     private CloseableHttpClient getPkcs12Client(String mchId, InputStream instream) throws Exception {
         KeyStore keyStore = KeyStore.getInstance(EncryptContant.PKCS12);

@@ -6,10 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 日期工具类
@@ -37,6 +34,52 @@ public class DateUtils {
     public static final String DATE_FORMAT = "yyyyMMdd";
 
     public static final String FORMAT_PATTERN_FULL = "yyyy-MM-dd HH:mm:ss";
+    public static final String formatPattern_full = "yyyy-MM-dd HH:mm:ss";
+
+    /**
+     * 锁对象
+     */
+    private static final Object lockObj = new Object();
+
+    /**
+     * 存放不同的日期模板格式的sdf的Map
+     */
+    private static Map<String, ThreadLocal<SimpleDateFormat>> sdfMap = new HashMap<>();
+
+
+    /**
+     * 返回一个ThreadLocal的sdf,每个线程只会new一次sdf
+     *
+     * @param pattern
+     * @return
+     */
+    private static SimpleDateFormat getSdf(final String pattern) {
+        ThreadLocal<SimpleDateFormat> tl = sdfMap.get(pattern);
+
+        // 此处的双重判断和同步是为了防止sdfMap这个单例被多次put重复的sdf
+        if (tl == null) {
+            synchronized (lockObj) {
+                tl = sdfMap.get(pattern);
+                if (tl == null) {
+                    // 只有Map中还没有这个pattern的sdf才会生成新的sdf并放入map
+                    System.out.println("put new sdf of pattern " + pattern + " to map");
+
+                    // 这里是关键,使用ThreadLocal<SimpleDateFormat>替代原来直接new SimpleDateFormat
+                    tl = new ThreadLocal<SimpleDateFormat>() {
+
+                        @Override
+                        protected SimpleDateFormat initialValue() {
+                            System.out.println("thread: " + Thread.currentThread() + " init pattern: " + pattern);
+                            return new SimpleDateFormat(pattern);
+                        }
+                    };
+                    sdfMap.put(pattern, tl);
+                }
+            }
+        }
+
+        return tl.get();
+    }
 
 
     public static String createTime_expire(String time_expire) {
@@ -71,8 +114,7 @@ public class DateUtils {
         if (StringUtils.isBlank(formatPattern)) {
             formatPattern = DATE_FORMAT;
         }
-        SimpleDateFormat format = new SimpleDateFormat(formatPattern);
-        return format.format(date);
+        return getSdf(formatPattern).format(date);
     }
 
     public static String dateToString(String formatPattern) {
@@ -89,8 +131,7 @@ public class DateUtils {
         if (date == null) {
             return null;
         }
-        SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_PATTERN_FULL);
-        return sdf.format(date);
+        return getSdf(formatPattern_full).format(date);
     }
 
     /**
@@ -101,13 +142,11 @@ public class DateUtils {
      */
     public static Date stringToDate(String str) {
         //str =  " 2008-07-10 19:20:00 " 格式
-        SimpleDateFormat format = new SimpleDateFormat(FORMAT_PATTERN);
-        if (StringUtils.isNotEmpty(str)) {
+        if(org.springframework.util.StringUtils.hasText(str)){
             try {
-                return format.parse(str);
+                return getSdf(FORMAT_PATTERN).parse(str);
             } catch (ParseException e) {
-                log.error("异常信息是:", e);
-                ;
+                log.error("异常信息是:",e);;
             }
         }
         return null;
@@ -122,12 +161,11 @@ public class DateUtils {
      */
     public static Date str2DateByFormat(String str, String format) {
         //str =  " 2008-07-10 19:20:00 " 格式
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
-        if (StringUtils.isNotEmpty(str)) {
+        if(org.springframework.util.StringUtils.hasText(str)){
             try {
-                return sdf.parse(str);
+                return getSdf(format).parse(str);
             } catch (ParseException e) {
-                log.error("异常信息是:", e);
+                log.error("异常信息是:",e);;
             }
         }
         return null;
@@ -152,8 +190,8 @@ public class DateUtils {
         if (null == time) {
             return "";
         }
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        return sdf.format(new Date(time));
+        return getSdf(pattern).format(new Date(time));
+
     }
 
 
@@ -183,7 +221,7 @@ public class DateUtils {
             return null;
         }
         try {
-            return Integer.parseInt(new SimpleDateFormat(DATE_FORMAT).format(generateTime));
+            return Integer.parseInt(getSdf(DATE_FORMAT).format(generateTime));
         } catch (Exception e) {
             log.error("dateToIntegerError,generateTime=" + generateTime, e);
             return null;
@@ -197,8 +235,7 @@ public class DateUtils {
         if ("".equals(time.toString())) {
             return "";
         }
-        SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_PATTERN_FULL);
-        return sdf.format(new Date(Long.parseLong(time.toString())));
+        return getSdf(FORMAT_PATTERN_FULL).format(new Date(Long.parseLong(time.toString())));
     }
 
     /**
@@ -335,7 +372,7 @@ public class DateUtils {
             date2LongFormat = DATE_FORMAT;
         }
         try {
-            return Long.valueOf(new SimpleDateFormat(date2LongFormat).format(generateTime));
+            return Long.valueOf(getSdf(date2LongFormat).format(generateTime));
         } catch (Exception e) {
             log.error("dateToLongError,generateTime=" + generateTime, e);
             return null;
@@ -363,8 +400,7 @@ public class DateUtils {
      * @return
      */
     public static String getCurrentDate() {
-        SimpleDateFormat format = new SimpleDateFormat(FORMAT_PATTERN);
-        return format.format(new Date());
+        return getSdf(FORMAT_PATTERN).format(new Date());
     }
 
     /**

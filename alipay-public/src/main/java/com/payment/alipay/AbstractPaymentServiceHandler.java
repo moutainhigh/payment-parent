@@ -33,11 +33,7 @@ import java.util.concurrent.ExecutorService;
 @Slf4j
 public abstract class AbstractPaymentServiceHandler {
 
-//    protected BaseWechatConfig config;
-//    protected BaseRongYunTongConfig rongYunTongConfig;
     protected HttpRequestUtil httpRequestUtil;
-
-
 
     protected void writeBillToServer(ExecutorService pool, String statementDate, BillTypeEnum billType, String response, String statementFilePath, String preName) {
 

@@ -32,49 +32,6 @@ public class PaymentUtil {
 
     }
 
-    public static boolean isAllEmpty(CharSequence... css) {
-        for (CharSequence cs : css) {
-            if (StringUtils.isNotEmpty(cs)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 判断某个值是否包含在数组内
-     *
-     * @param value
-     * @param arrayList
-     * @return
-     */
-    public static boolean containsValue(String value, String[] arrayList) {
-        if (arrayList == null || arrayList.length == 0) {
-            return false;
-        }
-        for (String array : arrayList) {
-            if (array.equals(value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 千丁系统订单号创建
-     * 创建规则：yyyyMMddHHmmssSSS + 8位随机字符串
-     * 去掉入参：长度25
-     *
-     * @param preString 前置标识
-     * @return
-     */
-    public static String generateOrderNo(String preString) {
-        return new StringBuffer()
-                .append(preString)
-                .append(DateUtils.dateToString(DateUtils.FORMAT_MS))
-                .append(generateString(6)).toString();
-    }
-
     /**
      * 返回一个定长的随机字符串(只包含大小写字母、数字)
      *
@@ -93,24 +50,6 @@ public class PaymentUtil {
 
     }
 
-    /**
-     * @param object
-     * @return
-     */
-    public static HashMap<String, Object> toParamsMap(Object object) {
-        HashMap<String, Object> paramsMap = Maps.newHashMap();
-        Field[] fieldList = object.getClass().getDeclaredFields();
-
-        //当前类属性赋值
-        setFieldToMap(object, paramsMap, fieldList);
-
-        //读取父类属性信息
-        for (Class<?> superCls = object.getClass().getSuperclass(); superCls != null; superCls = superCls.getSuperclass()) {
-            setFieldToMap(object, paramsMap, superCls.getDeclaredFields());
-        }
-
-        return paramsMap;
-    }
 
     private static void setFieldToMap(Object object, Map paramsMap, Field[] fieldList) {
         for (Field field : fieldList) {
@@ -135,38 +74,98 @@ public class PaymentUtil {
      * @param object
      * @return
      */
-    public static Map<String, String> objectToMap(Object object) {
-        Map<String, String> map = new HashMap<>();
-        Class<?> cls = object.getClass();
-        Field[] fields = object.getClass().getDeclaredFields();
-        setFieldToMap(object, map, fields);
-        //读取父类属性信息
-        for (Class<?> superCls = cls.getSuperclass(); superCls != null; superCls = superCls.getSuperclass()) {
-            setFieldToMap(object, map, superCls.getDeclaredFields());
-        }
-
-        return map;
-    }
+//    public static Map<String, String> objectToMap(Object object) {
+//        Map<String, String> map = new HashMap<>();
+//        Class<?> cls = object.getClass();
+//        Field[] fields = object.getClass().getDeclaredFields();
+//        setFieldToMap(object, map, fields);
+//        //读取父类属性信息
+//        for (Class<?> superCls = cls.getSuperclass(); superCls != null; superCls = superCls.getSuperclass()) {
+//            setFieldToMap(object, map, superCls.getDeclaredFields());
+//        }
+//
+//        return map;
+//    }
 
     /**
      * 字符串转md5字符串的方法
      * @param str
      * @return
      */
-    public static String getMD5Str(String str){
-        if (str == null || str.length() == 0) {
-            log.error("md5转换传入字符串为空");
-            return null;
-        }
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(str.getBytes());
-
-            return new BigInteger(1, md.digest()).toString(16);
-        } catch (NoSuchAlgorithmException e){
-            log.error("md5转换出现异常", e);
-            return null;
-        }
-    }
-
+//    public static String getMD5Str(String str){
+//        if (str == null || str.length() == 0) {
+//            log.error("md5转换传入字符串为空");
+//            return null;
+//        }
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//            md.update(str.getBytes());
+//
+//            return new BigInteger(1, md.digest()).toString(16);
+//        } catch (NoSuchAlgorithmException e){
+//            log.error("md5转换出现异常", e);
+//            return null;
+//        }
+//    }
+//
+//    public static boolean isAllEmpty(CharSequence... css) {
+//        for (CharSequence cs : css) {
+//            if (StringUtils.isNotEmpty(cs)) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+//
+//    /**
+//     * 判断某个值是否包含在数组内
+//     *
+//     * @param value
+//     * @param arrayList
+//     * @return
+//     */
+//    public static boolean containsValue(String value, String[] arrayList) {
+//        if (arrayList == null || arrayList.length == 0) {
+//            return false;
+//        }
+//        for (String array : arrayList) {
+//            if (array.equals(value)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    /**
+//     * 千丁系统订单号创建
+//     * 创建规则：yyyyMMddHHmmssSSS + 8位随机字符串
+//     * 去掉入参：长度25
+//     *
+//     * @param preString 前置标识
+//     * @return
+//     */
+//    public static String generateOrderNo(String preString) {
+//        return new StringBuffer()
+//                .append(preString)
+//                .append(DateUtils.dateToString(DateUtils.FORMAT_MS))
+//                .append(generateString(6)).toString();
+//    }
+//    /**
+//     * @param object
+//     * @return
+//     */
+//    public static HashMap<String, Object> toParamsMap(Object object) {
+//        HashMap<String, Object> paramsMap = Maps.newHashMap();
+//        Field[] fieldList = object.getClass().getDeclaredFields();
+//
+//        //当前类属性赋值
+//        setFieldToMap(object, paramsMap, fieldList);
+//
+//        //读取父类属性信息
+//        for (Class<?> superCls = object.getClass().getSuperclass(); superCls != null; superCls = superCls.getSuperclass()) {
+//            setFieldToMap(object, paramsMap, superCls.getDeclaredFields());
+//        }
+//
+//        return paramsMap;
+//    }
 }
